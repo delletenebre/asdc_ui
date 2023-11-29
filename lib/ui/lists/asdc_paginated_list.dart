@@ -5,8 +5,9 @@ import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
 import '../../resources/asdc_locale.dart';
 import '../forms/krs_forms.dart';
+import 'asdc_list_filter.dart';
 
-class PaginatedList<T> extends StatefulWidget {
+class AsdcPaginatedList<T> extends StatefulWidget {
   final bool loading;
   final Object? error;
   final Paginator? paginator;
@@ -18,7 +19,9 @@ class PaginatedList<T> extends StatefulWidget {
 
   final List<PaginatedListColumn> columns;
 
-  const PaginatedList({
+  final List<AsdcListFilter> filterOptions;
+
+  const AsdcPaginatedList({
     super.key,
     this.loading = false,
     this.error,
@@ -27,13 +30,14 @@ class PaginatedList<T> extends StatefulWidget {
     this.onTap,
     required this.onPaginationChanged,
     required this.columns,
+    this.filterOptions = const [],
   }) : assert(rowBuilders.length == columns.length);
 
   @override
-  State<PaginatedList<T>> createState() => _PaginatedListState<T>();
+  State<AsdcPaginatedList<T>> createState() => _AsdcPaginatedListState<T>();
 }
 
-class _PaginatedListState<T> extends State<PaginatedList<T>> {
+class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
   int hoveredRow = -1;
 
   /// текущий курсор
@@ -113,12 +117,12 @@ class _PaginatedListState<T> extends State<PaginatedList<T>> {
 
                     /// возвращаем заголовки таблицы
                     return InkWell(
-                      onTap: column.name.isEmpty
+                      onTap: column.field.isEmpty
                           ? null
                           : () {
                               /// ^ при нажатии на столбец
 
-                              if (sortBy == column.name) {
+                              if (sortBy == column.field) {
                                 /// ^ если по столбцу уже включена сортировка
                                 if (sortDirection == 'desc') {
                                   /// ^ если направление сортировки по убыванию
@@ -139,7 +143,7 @@ class _PaginatedListState<T> extends State<PaginatedList<T>> {
                               }
 
                               /// обновляем поле, по которому осуществляется сортировка
-                              sortBy = column.name;
+                              sortBy = column.field;
 
                               onFormChanged();
                             },
@@ -160,8 +164,8 @@ class _PaginatedListState<T> extends State<PaginatedList<T>> {
                               ),
 
                               /// стрелки направления сортировки
-                              if (sortBy == column.name &&
-                                  column.name.isNotEmpty)
+                              if (sortBy == column.field &&
+                                  column.field.isNotEmpty)
                                 Icon(
                                   sortDirection == 'desc'
                                       ? Icons.arrow_downward_outlined
@@ -384,13 +388,13 @@ class _PaginatedListState<T> extends State<PaginatedList<T>> {
 
 class PaginatedListColumn {
   final String label;
-  final String name;
+  final String field;
   final double width;
   final Alignment? align;
 
-  PaginatedListColumn({
+  const PaginatedListColumn({
     this.label = '',
-    this.name = '',
+    this.field = '',
     this.width = 0.0,
     this.align,
   });

@@ -34,7 +34,7 @@ class AsdcPageView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: DefaultTextStyle(
-                      style: theme.textTheme.headlineSmall!,
+                      style: theme.textTheme.titleLarge!,
                       child: title!,
                     ),
                   ),

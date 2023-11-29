@@ -20,24 +20,28 @@ class Paginator<T> {
     this.data = const [],
   });
 
-  Paginator fromJson(Map<String, dynamic> json) => Paginator(
-        total: int.tryParse(json['total']) ?? 0,
-        perPage: int.tryParse(json['per_page']) ?? 10,
-        currentPage: int.tryParse(json['current_page']) ?? 1,
-        lastPage: int.tryParse(json['last_page']) ?? 1,
-        from: int.tryParse(json['from']) ?? 0,
-        to: int.tryParse(json['to']) ?? 0,
-        data: json['data'] as List<T>? ?? const [],
+  factory Paginator.fromJson(
+          Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
+      Paginator<T>(
+        total: json['total'] as int ?? 0,
+        perPage: json['per_page'] as int ?? 10,
+        currentPage: json['current_page'] as int ?? 1,
+        lastPage: json['last_page'] as int ?? 1,
+        from: json['from'] as int ?? 0,
+        to: json['to'] as int ?? 0,
+        data: (json['data'] as List<dynamic>?)?.map<T>(fromJsonT).toList() ??
+            const [],
       );
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      <String, dynamic>{
         'total': total,
         'per_page': perPage,
         'current_page': currentPage,
         'last_page': lastPage,
         'from': from,
         'to': to,
-        'data': data,
+        'data': data.map(toJsonT).toList(),
       };
 
   bool get isEmpty => data.isEmpty;
