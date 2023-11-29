@@ -21,6 +21,7 @@ extension ContextExtensions on BuildContext {
       isIgnoring: false,
       animation: StyledToastAnimation.slideFromRightFade,
       reverseAnimation: StyledToastAnimation.slideFromRightFade,
+      dismissOtherToast: true,
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension StringExtensions on String {
+extension AvatarExtensions on String {
   static const animalsList = [
     'bee',
     'cat',

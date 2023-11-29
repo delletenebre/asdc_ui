@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-const kDrawerWidth = 300.0;
+/// ширина навигационной панели
+const kDrawerWidth = 260.0;
 
 class AsdcTheme {
-  /// ширина навигационной панели
-  static const navigationMenuWidth = 260.0;
+  /// отступы обычные
+  static const md = 24.0;
+  static const paddingMd = EdgeInsets.all(md);
 
   /// тип прокрутки содержимого
   static const scrollPhysics = BouncingScrollPhysics(
