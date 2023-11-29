@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
-import '../resources/krs_theme.dart';
+import '../resources/asdc_theme.dart';
 import '../ui/krs_notification.dart';
 
 extension ContextExtensions on BuildContext {
@@ -25,17 +25,17 @@ extension ContextExtensions on BuildContext {
   }
 
   /// информационное уведомление
-  void showNotification(String? title, String message) {
+  void showNotification({String? title, String message = ''}) {
     _showNotification(KrsNotification(title: title, message: message));
   }
 
   /// уведомление об успешной операции
-  void showNotificationSuccess(String? title, String message) {
+  void showSuccessNotification({String? title, String message = ''}) {
     _showNotification(KrsNotification.success(title: title, message: message));
   }
 
   /// уведомление об операции с ошибкой
-  void showNotificationError(String? title, String message) {
+  void showErrorNotification({String? title, String message = ''}) {
     _showNotification(KrsNotification.error(title: title, message: message));
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const kDrawerWidth = 300.0;
 
-class KrsTheme {
+class AsdcTheme {
   /// ширина навигационной панели
   static const navigationMenuWidth = 260.0;
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class KrsLocale {
-  KrsLocale._();
+class AsdcLocale {
+  AsdcLocale._();
 
   static AppLocalizations of(BuildContext context) {
     return AppLocalizations.of(context)!;

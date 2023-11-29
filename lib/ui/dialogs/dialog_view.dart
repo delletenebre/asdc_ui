@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../resources/krs_theme.dart';
+import '../../resources/asdc_theme.dart';
 
 class DialogView extends StatelessWidget {
   final double width;

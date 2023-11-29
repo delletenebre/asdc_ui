@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:material_color_utilities/utils/math_utils.dart';
 
-import '../resources/krs_theme.dart';
+import '../resources/asdc_theme.dart';
 
 extension ThemeDataExtensions on ThemeData {
   Color _surfaceContainerColor(int lightTone, int darkTone) {
-    final palette = CorePalette.of(KrsTheme.seedColor.value);
+    final palette = CorePalette.of(AsdcTheme.seedColor.value);
     return Color(palette.neutral
         .get(brightness == Brightness.light ? lightTone : darkTone));
   }

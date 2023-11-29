@@ -3,7 +3,7 @@ import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
-import '../../resources/krs_locale.dart';
+import '../../resources/asdc_locale.dart';
 import '../forms/krs_forms.dart';
 
 class PaginatedList<T> extends StatefulWidget {
@@ -75,7 +75,7 @@ class _PaginatedListState<T> extends State<PaginatedList<T>> {
   @override
   Widget build(context) {
     final theme = Theme.of(context);
-    final locale = KrsLocale.of(context);
+    final locale = AsdcLocale.of(context);
 
     if (widget.error != null) {
       /// ^ если произошла ошибка
