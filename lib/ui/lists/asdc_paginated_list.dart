@@ -95,291 +95,297 @@ class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
       );
     }
 
-    return SizedBox(
-      /// + 2 - заголовки столбцов + нижняя панель
-      height: (widget.paginator!.data.length + 2) * 44.0,
-      child: DefaultTextStyle(
-        style: theme.textTheme.bodyMedium!.copyWith(
-          fontSize: 12.0,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: TableView.builder(
-                primary: false,
-                pinnedRowCount: 1,
-                cellBuilder: (context, vicinity) {
-                  if (vicinity.row == 0) {
-                    /// ^ если первая строка
+    return Material(
+      elevation: 1,
+      color: theme.colorScheme.secondaryContainer,
+      borderRadius: BorderRadius.circular(12.0),
+      child: SizedBox(
+        /// + 2 - заголовки столбцов + нижняя панель
+        height: (widget.paginator!.data.length + 2) * 44.0,
+        child: DefaultTextStyle(
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontSize: 12.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: TableView.builder(
+                  primary: false,
+                  pinnedRowCount: 1,
+                  cellBuilder: (context, vicinity) {
+                    if (vicinity.row == 0) {
+                      /// ^ если первая строка
 
-                    final column = widget.columns[vicinity.column];
+                      final column = widget.columns[vicinity.column];
 
-                    /// возвращаем заголовки таблицы
-                    return InkWell(
-                      onTap: column.field.isEmpty
-                          ? null
-                          : () {
-                              /// ^ при нажатии на столбец
+                      /// возвращаем заголовки таблицы
+                      return InkWell(
+                        onTap: column.field.isEmpty
+                            ? null
+                            : () {
+                                /// ^ при нажатии на столбец
 
-                              if (sortBy == column.field) {
-                                /// ^ если по столбцу уже включена сортировка
-                                if (sortDirection == 'desc') {
-                                  /// ^ если направление сортировки по убыванию
+                                if (sortBy == column.field) {
+                                  /// ^ если по столбцу уже включена сортировка
+                                  if (sortDirection == 'desc') {
+                                    /// ^ если направление сортировки по убыванию
 
-                                  /// ставим сортировку по возрастанию
-                                  sortDirection = 'asc';
+                                    /// ставим сортировку по возрастанию
+                                    sortDirection = 'asc';
+                                  } else {
+                                    /// ^ если направление сортировки по возрастанию
+
+                                    /// ставим сортировку по убыванию
+                                    sortDirection = 'desc';
+                                  }
                                 } else {
-                                  /// ^ если направление сортировки по возрастанию
+                                  /// ^ если по полю не осуществляется сортировка
 
                                   /// ставим сортировку по убыванию
                                   sortDirection = 'desc';
                                 }
-                              } else {
-                                /// ^ если по полю не осуществляется сортировка
 
-                                /// ставим сортировку по убыванию
-                                sortDirection = 'desc';
-                              }
+                                /// обновляем поле, по которому осуществляется сортировка
+                                sortBy = column.field;
 
-                              /// обновляем поле, по которому осуществляется сортировка
-                              sortBy = column.field;
+                                onFormChanged();
+                              },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    column.label,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.outline,
+                                    ),
+                                  ),
+                                ),
 
-                              onFormChanged();
-                            },
+                                /// стрелки направления сортировки
+                                if (sortBy == column.field &&
+                                    column.field.isNotEmpty)
+                                  Icon(
+                                    sortDirection == 'desc'
+                                        ? Icons.arrow_downward_outlined
+                                        : Icons.arrow_upward_outlined,
+                                    color: theme.colorScheme.outline,
+                                    size: 14.0,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    /// возвращаем ячейки таблицы
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => widget.onTap
+                          ?.call(widget.paginator!.data[vicinity.row - 1]),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  column.label,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: theme.colorScheme.outline,
-                                  ),
-                                ),
-                              ),
-
-                              /// стрелки направления сортировки
-                              if (sortBy == column.field &&
-                                  column.field.isNotEmpty)
-                                Icon(
-                                  sortDirection == 'desc'
-                                      ? Icons.arrow_downward_outlined
-                                      : Icons.arrow_upward_outlined,
-                                  color: theme.colorScheme.outline,
-                                  size: 14.0,
-                                ),
-                            ],
-                          ),
+                          alignment: widget.columns[vicinity.column].align ??
+                              Alignment.centerLeft,
+                          child: widget.rowBuilders[vicinity.column](context,
+                              widget.paginator!.data[vicinity.row - 1]),
                         ),
                       ),
                     );
-                  }
-
-                  /// возвращаем ячейки таблицы
-                  return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => widget.onTap
-                        ?.call(widget.paginator!.data[vicinity.row - 1]),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Align(
-                        alignment: widget.columns[vicinity.column].align ??
-                            Alignment.centerLeft,
-                        child: widget.rowBuilders[vicinity.column](
-                            context, widget.paginator!.data[vicinity.row - 1]),
-                      ),
-                    ),
-                  );
-                },
-                columnCount: widget.columns.length,
-                columnBuilder: (int index) {
-                  return TableSpan(
-                    // foregroundDecoration: const TableSpanDecoration(
-                    //   border: TableSpanBorder(
-                    //     trailing: BorderSide(),
-                    //   ),
-                    // ),
-                    extent: index == widget.columns.length - 1
-                        ? MaxTableSpanExtent(
-                            FixedTableSpanExtent(widget.columns[index].width),
-                            const RemainingTableSpanExtent())
-                        : FixedTableSpanExtent(widget.columns[index].width),
-                    cursor: SystemMouseCursors.contextMenu,
-                  );
-                },
-                rowCount: widget.paginator!.data.length + 1,
-                rowBuilder: (int index) {
-                  if (index == 0) {
-                    /// ^ если первая строка
-
-                    /// возвращаем заголовки таблицы
+                  },
+                  columnCount: widget.columns.length,
+                  columnBuilder: (int index) {
                     return TableSpan(
-                      backgroundDecoration: TableSpanDecoration(
-                        border: TableSpanBorder(
-                          trailing: BorderSide(
-                            width: 1,
-                            color: theme.colorScheme.outline.withOpacity(0.36),
-                          ),
-                        ),
-                      ),
-                      extent: const FixedTableSpanExtent(44),
-                      cursor: SystemMouseCursors.basic,
-                      onEnter: (event) {},
-                    );
-                  }
-
-                  return TableSpan(
-                    backgroundDecoration: TableSpanDecoration(
-                      // border: const TableSpanBorder(
-                      //   trailing: BorderSide(
-                      //     width: 1,
+                      // foregroundDecoration: const TableSpanDecoration(
+                      //   border: TableSpanBorder(
+                      //     trailing: BorderSide(),
                       //   ),
                       // ),
-                      color: hoveredRow == index
-                          ? theme.colorScheme.primary.withOpacity(0.08)
-                          : null,
-                    ),
-                    extent: const FixedTableSpanExtent(44),
-                    cursor: SystemMouseCursors.click,
-                    onEnter: (event) {
-                      hoveredRow = index;
-                    },
-                    onExit: (event) {
-                      hoveredRow = -1;
-                    },
-                  );
-                },
+                      extent: index == widget.columns.length - 1
+                          ? MaxTableSpanExtent(
+                              FixedTableSpanExtent(widget.columns[index].width),
+                              const RemainingTableSpanExtent())
+                          : FixedTableSpanExtent(widget.columns[index].width),
+                      cursor: SystemMouseCursors.contextMenu,
+                    );
+                  },
+                  rowCount: widget.paginator!.data.length + 1,
+                  rowBuilder: (int index) {
+                    if (index == 0) {
+                      /// ^ если первая строка
+
+                      /// возвращаем заголовки таблицы
+                      return TableSpan(
+                        backgroundDecoration: TableSpanDecoration(
+                          border: TableSpanBorder(
+                            trailing: BorderSide(
+                              width: 1,
+                              color:
+                                  theme.colorScheme.outline.withOpacity(0.36),
+                            ),
+                          ),
+                        ),
+                        extent: const FixedTableSpanExtent(44),
+                        cursor: SystemMouseCursors.basic,
+                        onEnter: (event) {},
+                      );
+                    }
+
+                    return TableSpan(
+                      backgroundDecoration: TableSpanDecoration(
+                        // border: const TableSpanBorder(
+                        //   trailing: BorderSide(
+                        //     width: 1,
+                        //   ),
+                        // ),
+                        color: hoveredRow == index
+                            ? theme.colorScheme.primary.withOpacity(0.08)
+                            : null,
+                      ),
+                      extent: const FixedTableSpanExtent(44),
+                      cursor: SystemMouseCursors.click,
+                      onEnter: (event) {
+                        hoveredRow = index;
+                      },
+                      onExit: (event) {
+                        hoveredRow = -1;
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
 
-            /// навигация по данным (номер страницы, количество результатов)
-            SizedBox(
-              height: 44.0,
-              child: FormBuilder(
-                key: formKey,
-                initialValue: {
-                  'per_page': perPage,
-                  'page': currentPage.toString(),
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      locale.rowsPerPage,
-                      style: TextStyle(
-                        color: theme.colorScheme.outline,
+              /// навигация по данным (номер страницы, количество результатов)
+              SizedBox(
+                height: 44.0,
+                child: FormBuilder(
+                  key: formKey,
+                  initialValue: {
+                    'per_page': perPage,
+                    'page': currentPage.toString(),
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        locale.rowsPerPage,
+                        style: TextStyle(
+                          color: theme.colorScheme.outline,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 6.0),
+                      const SizedBox(width: 6.0),
 
-                    /// поле выбора количества результатов на странице
-                    SizedBox(
-                      width: 80.0,
-                      child: KrsDropdownField<int>(
-                        padding: EdgeInsets.zero,
-                        name: 'per_page',
-                        asyncOptions: () async => {
-                          10: '10',
-                          25: '25',
-                          50: '50',
-                          100: '100',
-                        },
-                        onChanged: (value) {
-                          perPage = value!;
-                          onFormChanged();
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 24.0),
-                    Text(
-                      locale.tableDataOf(
-                        widget.paginator!.from,
-                        widget.paginator!.to,
-                        widget.paginator!.total,
-                      ),
-                      style: TextStyle(
-                        color: theme.colorScheme.outline,
-                      ),
-                    ),
-                    const SizedBox(width: 24.0),
-
-                    /// кнопка перехода на первую страницу
-                    IconButton(
-                      onPressed: !widget.paginator!.firstPageEnabled
-                          ? null
-                          : () {
-                              currentPage = 1;
-                              onFormChanged();
-                            },
-                      tooltip: locale.firstPage,
-                      icon: const Icon(Icons.first_page_outlined),
-                    ),
-
-                    /// кнопка перехода на предыдущую страницу
-                    IconButton(
-                      onPressed: !widget.paginator!.hasPreviousPage
-                          ? null
-                          : () {
-                              currentPage = widget.paginator!.currentPage - 1;
-                              onFormChanged();
-                            },
-                      tooltip: locale.previousPage,
-                      icon: const Icon(Icons.chevron_left_outlined),
-                    ),
-
-                    /// поле выбора номера страницы
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: SizedBox(
-                        width: 64.0,
-                        child: KrsTextField(
+                      /// поле выбора количества результатов на странице
+                      SizedBox(
+                        width: 80.0,
+                        child: KrsDropdownField<int>(
                           padding: EdgeInsets.zero,
-                          isDense: true,
-                          name: 'page',
-                          onSubmitted: (value) {
-                            final page = int.tryParse(value);
-                            if (page != null) {
-                              currentPage = page;
-                              onFormChanged();
-                            }
+                          name: 'per_page',
+                          asyncOptions: () async => {
+                            10: '10',
+                            25: '25',
+                            50: '50',
+                            100: '100',
+                          },
+                          onChanged: (value) {
+                            perPage = value!;
+                            onFormChanged();
                           },
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 24.0),
+                      Text(
+                        locale.tableDataOf(
+                          widget.paginator!.from,
+                          widget.paginator!.to,
+                          widget.paginator!.total,
+                        ),
+                        style: TextStyle(
+                          color: theme.colorScheme.outline,
+                        ),
+                      ),
+                      const SizedBox(width: 24.0),
 
-                    /// кнопка перехода на следующую страницу
-                    IconButton(
-                      onPressed: !widget.paginator!.hasNextPage
-                          ? null
-                          : () {
-                              currentPage = widget.paginator!.currentPage + 1;
-                              onFormChanged();
-                            },
-                      tooltip: locale.nextPage,
-                      icon: const Icon(Icons.chevron_right_outlined),
-                    ),
+                      /// кнопка перехода на первую страницу
+                      IconButton(
+                        onPressed: !widget.paginator!.firstPageEnabled
+                            ? null
+                            : () {
+                                currentPage = 1;
+                                onFormChanged();
+                              },
+                        tooltip: locale.firstPage,
+                        icon: const Icon(Icons.first_page_outlined),
+                      ),
 
-                    /// кнопка перехода на последнюю страницу
-                    IconButton(
-                      onPressed: !widget.paginator!.lastPageEnabled
-                          ? null
-                          : () {
-                              currentPage = widget.paginator!.lastPage;
-                              onFormChanged();
+                      /// кнопка перехода на предыдущую страницу
+                      IconButton(
+                        onPressed: !widget.paginator!.hasPreviousPage
+                            ? null
+                            : () {
+                                currentPage = widget.paginator!.currentPage - 1;
+                                onFormChanged();
+                              },
+                        tooltip: locale.previousPage,
+                        icon: const Icon(Icons.chevron_left_outlined),
+                      ),
+
+                      /// поле выбора номера страницы
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: SizedBox(
+                          width: 64.0,
+                          child: KrsTextField(
+                            padding: EdgeInsets.zero,
+                            isDense: true,
+                            name: 'page',
+                            onSubmitted: (value) {
+                              final page = int.tryParse(value);
+                              if (page != null) {
+                                currentPage = page;
+                                onFormChanged();
+                              }
                             },
-                      tooltip: locale.lastPage,
-                      icon: const Icon(Icons.last_page_outlined),
-                    ),
-                  ],
+                          ),
+                        ),
+                      ),
+
+                      /// кнопка перехода на следующую страницу
+                      IconButton(
+                        onPressed: !widget.paginator!.hasNextPage
+                            ? null
+                            : () {
+                                currentPage = widget.paginator!.currentPage + 1;
+                                onFormChanged();
+                              },
+                        tooltip: locale.nextPage,
+                        icon: const Icon(Icons.chevron_right_outlined),
+                      ),
+
+                      /// кнопка перехода на последнюю страницу
+                      IconButton(
+                        onPressed: !widget.paginator!.lastPageEnabled
+                            ? null
+                            : () {
+                                currentPage = widget.paginator!.lastPage;
+                                onFormChanged();
+                              },
+                        tooltip: locale.lastPage,
+                        icon: const Icon(Icons.last_page_outlined),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
