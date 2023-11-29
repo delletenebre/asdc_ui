@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
+import '../../extensions/theme_data_extensions.dart';
 import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
 import '../../resources/asdc_locale.dart';
@@ -97,7 +98,7 @@ class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
 
     return Material(
       elevation: 1,
-      color: theme.colorScheme.secondaryContainer,
+      color: theme.surfaceContainerLow,
       borderRadius: BorderRadius.circular(12.0),
       child: SizedBox(
         /// + 2 - заголовки столбцов + нижняя панель
