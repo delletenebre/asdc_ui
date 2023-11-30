@@ -158,3 +158,35 @@ extension FormBuilderStateExtensions on Map<String, dynamic> {
     return stringMap;
   }
 }
+
+extension MapExtensions on Map {
+  Object? valueFor(String keyPath) {
+    final keysSplit = keyPath.split('.');
+    final thisKey = keysSplit.removeAt(0);
+    final thisValue = this[thisKey];
+    if (keysSplit.isEmpty) {
+      return thisValue;
+    } else if (thisValue is Map) {
+      return thisValue.valueFor(keysSplit.join('.'));
+    } else if (thisValue is List) {
+      return thisValue.valueFor(keysSplit.join('.'));
+    }
+    return thisValue;
+  }
+}
+
+extension ListExtensions on List {
+  Object? valueFor(String keyPath) {
+    final keysSplit = keyPath.split('.');
+    final thisKey = keysSplit.removeAt(0);
+    final thisValue = this[int.parse(thisKey)];
+    if (keysSplit.isEmpty) {
+      return thisValue;
+    } else if (thisValue is Map) {
+      return thisValue.valueFor(keysSplit.join('.'));
+    } else if (thisValue is List) {
+      return thisValue.valueFor(keysSplit.join('.'));
+    }
+    return thisValue;
+  }
+}

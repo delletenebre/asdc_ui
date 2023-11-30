@@ -21,7 +21,7 @@ class KrsFieldLabel extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final theme = Theme.of(context);
 
     final textStyle = TextStyle(

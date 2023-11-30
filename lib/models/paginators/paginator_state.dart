@@ -33,6 +33,23 @@ class PaginatorState {
         'filters': filters,
       };
 
+  PaginatorState copyWith({
+    String? cursor,
+    int? page,
+    int? perPage,
+    String? sortBy,
+    String? sortDirection,
+    Map<String, dynamic>? filters,
+  }) =>
+      PaginatorState(
+        cursor: cursor ?? this.cursor,
+        page: page ?? this.page,
+        perPage: perPage ?? this.perPage,
+        sortBy: sortBy ?? this.sortBy,
+        sortDirection: sortDirection ?? this.sortDirection,
+        filters: filters ?? this.filters,
+      );
+
   Map<String, dynamic> toFormData() {
     final data = toJson();
     data.remove('filters');

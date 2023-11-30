@@ -23,12 +23,12 @@ class Paginator<T> {
   factory Paginator.fromJson(
           Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
       Paginator<T>(
-        total: json['total'] as int ?? 0,
+        total: json['total'] as int? ?? 0,
         perPage: json['per_page'] as int ?? 10,
         currentPage: json['current_page'] as int ?? 1,
         lastPage: json['last_page'] as int ?? 1,
-        from: json['from'] as int ?? 0,
-        to: json['to'] as int ?? 0,
+        from: json['from'] as int? ?? 0,
+        to: json['to'] as int? ?? 0,
         data: (json['data'] as List<dynamic>?)?.map<T>(fromJsonT).toList() ??
             const [],
       );

@@ -21,4 +21,21 @@ class AsdcListFilter {
     this.formValue,
     this.asyncOptions,
   });
+
+  AsdcListFilter copyWith({
+    String? name,
+    String? label,
+    AsdcListFilterType? type,
+    dynamic value,
+    dynamic formValue,
+    Future<Map<String, String>> Function()? asyncOptions,
+  }) =>
+      AsdcListFilter(
+        name: name ?? this.name,
+        label: label ?? this.label,
+        type: type ?? this.type,
+        value: value ?? this.value,
+        formValue: formValue ?? this.formValue,
+        asyncOptions: asyncOptions ?? this.asyncOptions,
+      );
 }

@@ -77,6 +77,8 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
               child: ScrollConfiguration(
                 behavior: const MaterialScrollBehavior(),
                 child: TextField(
+                  scrollPadding: EdgeInsets.zero,
+
                   controller: state._effectiveController,
                   focusNode: state.effectiveFocusNode,
                   decoration: decoration,
@@ -96,7 +98,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
                   maxLength: maxLength,
                   buildCounter: (context,
                       {required currentLength, required isFocused, maxLength}) {
-                    return const SizedBox();
+                    return null;
                   },
                   // onTap: onTap,
                   onTapOutside: (event) {

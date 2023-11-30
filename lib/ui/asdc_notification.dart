@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../extensions/theme_data_extensions.dart';
 
-enum KrsNotificationType {
+enum AsdcNotificationType {
   info,
   error,
   success,
 }
 
-class KrsNotification extends StatelessWidget {
-  final KrsNotificationType type;
+class AsdcNotification extends StatelessWidget {
+  final AsdcNotificationType type;
   final String? title;
   final String message;
 
-  const KrsNotification({
+  const AsdcNotification({
     super.key,
-    this.type = KrsNotificationType.info,
+    this.type = AsdcNotificationType.info,
     this.title,
     required this.message,
   });
@@ -28,15 +28,15 @@ class KrsNotification extends StatelessWidget {
     late final Color foregroundColor;
 
     switch (type) {
-      case KrsNotificationType.success:
+      case AsdcNotificationType.success:
         backgroundColor = theme.successContainerColor();
         foregroundColor = theme.onSuccessContainerColor();
         break;
-      case KrsNotificationType.error:
+      case AsdcNotificationType.error:
         backgroundColor = theme.colorScheme.errorContainer;
         foregroundColor = theme.colorScheme.onErrorContainer;
         break;
-      case KrsNotificationType.info:
+      case AsdcNotificationType.info:
       default:
         backgroundColor = theme.colorScheme.surfaceVariant;
         foregroundColor = theme.colorScheme.onSurfaceVariant;
@@ -88,17 +88,17 @@ class KrsNotification extends StatelessWidget {
     );
   }
 
-  factory KrsNotification.error({String? title, required String message}) =>
-      KrsNotification(
+  factory AsdcNotification.error({String? title, required String message}) =>
+      AsdcNotification(
         title: title,
         message: message,
-        type: KrsNotificationType.error,
+        type: AsdcNotificationType.error,
       );
 
-  factory KrsNotification.success({String? title, required String message}) =>
-      KrsNotification(
+  factory AsdcNotification.success({String? title, required String message}) =>
+      AsdcNotification(
         title: title,
         message: message,
-        type: KrsNotificationType.success,
+        type: AsdcNotificationType.success,
       );
 }

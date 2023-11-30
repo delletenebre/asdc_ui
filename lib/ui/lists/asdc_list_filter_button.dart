@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/date_time_extensions.dart';
+import '../../../extensions/map_extensions.dart';
 import '../../resources/asdc_locale.dart';
-import '../forms/krs_forms.dart';
+import '../forms/asdc_forms.dart';
 import 'asdc_list_filter.dart';
 
 class AsdcListFilterButton extends StatefulWidget {
@@ -56,8 +57,8 @@ class _AsdcListFilterButtonState extends State<AsdcListFilterButton> {
                     width: 180.0,
                     child: KrsDropdownField(
                       name: 'filter_field_name',
-                      labelText: locale.field,
-                      initialValue: selectedOption.value.name,
+                      labelText: 'Поле',
+                      initialValue: selectedOption.name,
                       asyncOptions: () async {
                         return {
                           for (final option in widget.options)
@@ -66,9 +67,9 @@ class _AsdcListFilterButtonState extends State<AsdcListFilterButton> {
                       },
                       onChanged: (name) {
                         final option = widget.options
-                            .singleWhere((element) => element.name == name);
+                            .firstWhere((element) => element.name == name);
                         selectedOption = option;
-                        seletedValue.value = null;
+                        seletedValue = null;
 
                         setState(() {});
                       },
@@ -77,43 +78,41 @@ class _AsdcListFilterButtonState extends State<AsdcListFilterButton> {
                   const SizedBox(width: 4.0),
                   SizedBox(
                     width: 180.0,
-                    child: switch (selectedOption.value.type) {
+                    child: switch (selectedOption.type) {
                       AsdcListFilterType.text => KrsTextField(
-                          labelText: locale.value,
+                          labelText: 'Значение',
                           name: 'filter_field_value',
                           onChanged: (value) {
-                            seletedValue.value = value;
+                            seletedValue = value;
                           },
                         ),
                       AsdcListFilterType.date => KrsDateField(
-                          labelText: locale.value,
+                          labelText: 'Значение',
                           name: 'filter_field_value',
                           firstDate: now.subDate(years: 100),
                           lastDate: now.addDate(years: 1),
                           onChanged: (value) {
-                            seletedValue.value = value;
+                            seletedValue = value;
                           },
                         ),
                       AsdcListFilterType.select => KrsDropdownField(
                           name: 'filter_field_value',
-                          labelText: locale.value,
-                          asyncOptions: selectedOption.value.asyncOptions!,
+                          labelText: 'Значение',
+                          asyncOptions: selectedOption.asyncOptions!,
                           onChanged: (key) async {
-                            final values =
-                                await selectedOption.value.asyncOptions!();
-                            seletedValue.value = values[key];
+                            final values = await selectedOption.asyncOptions!();
+                            seletedValue = values[key];
                           },
                         ),
                       AsdcListFilterType.multiselect =>
                         KrsMultiselectField<String, String>(
                           name: 'filter_field_value',
-                          labelText: locale.value,
+                          labelText: 'Значение',
                           optionToString: (option) => option,
-                          asyncOptions: selectedOption.value.asyncOptions!,
+                          asyncOptions: selectedOption.asyncOptions!,
                           onChanged: (value) async {
-                            final values =
-                                await selectedOption.value.asyncOptions!();
-                            seletedValue.value = value?.map((key) {
+                            final values = await selectedOption.asyncOptions!();
+                            seletedValue = value?.map((key) {
                               return values[key];
                             }).toList();
                           },
@@ -136,12 +135,12 @@ class _AsdcListFilterButtonState extends State<AsdcListFilterButton> {
                 ),
                 TextButton(
                   onPressed: () {
-                    if (seletedValue.value != null &&
-                        seletedValue.value.toString().isNotEmpty) {
+                    if (seletedValue != null &&
+                        seletedValue.toString().isNotEmpty) {
                       formKey.currentState?.save();
                       final formData = formKey.currentState?.value;
-                      widget.onApply?.call(selectedOption.value.copyWith(
-                        value: seletedValue.value,
+                      widget.onApply?.call(selectedOption.copyWith(
+                        value: seletedValue,
                         formValue: formData?.valueFor('filter_field_value'),
                       ));
                     }

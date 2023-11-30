@@ -20,6 +20,7 @@ class KrsDropdownField<T> extends FormBuilderFieldDecoration<T> {
     this.itemBuilder,
     EdgeInsetsGeometry padding = const EdgeInsets.only(bottom: 24.0),
     String? labelText,
+    bool isDense = false,
   }) : super(
           builder: (FormFieldState<T> field) {
             final state = field as _KrsDropdownFieldState<T>;
@@ -35,10 +36,16 @@ class KrsDropdownField<T> extends FormBuilderFieldDecoration<T> {
               theme: theme,
               enabled: enabledState,
               errorText: state.errorText,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 10.5,
-                horizontal: 12.0,
-              ),
+              contentPadding: isDense
+                  ? const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 8.0,
+                    )
+                  : const EdgeInsets.symmetric(
+                      vertical: 10.5,
+                      horizontal: 12.0,
+                    ),
+              isDense: isDense,
             );
 
             final hasValue =

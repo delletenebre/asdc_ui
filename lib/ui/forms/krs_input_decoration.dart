@@ -29,11 +29,12 @@ class KrsInputDecoration extends InputDecoration {
         ),
         borderRadius = _borderRadius,
         super(
+          constraints: BoxConstraints.tightFor(height: isDense ? 28.0 : 36.0),
           isCollapsed: true,
           contentPadding: contentPadding ??
               EdgeInsets.symmetric(
                 vertical: isDense ? 10.5 : 16.5,
-                horizontal: 12.0,
+                horizontal: isDense ? 8.0 : 12.0,
               ),
 
           errorMaxLines: 2,
