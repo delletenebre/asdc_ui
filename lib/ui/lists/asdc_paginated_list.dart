@@ -464,6 +464,8 @@ class _DataViewState<T> extends State<_DataView<T>> {
         style: theme.textTheme.bodyMedium!.copyWith(
           fontSize: 12.0,
         ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
         child: TableView.builder(
           primary: false,
           pinnedRowCount: 1,
