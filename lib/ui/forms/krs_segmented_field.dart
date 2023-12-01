@@ -34,7 +34,7 @@ class KrsSegmentedField extends FormBuilderFieldDecoration<String?> {
               errorText: state.errorText,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 2.0,
-                vertical: 6.0,
+                vertical: 5.5,
               ),
             );
 

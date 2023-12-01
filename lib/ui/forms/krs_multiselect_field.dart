@@ -45,7 +45,7 @@ class KrsMultiselectField<T, K> extends FormBuilderFieldDecoration<List<T>> {
               errorText: state.errorText,
               hintText: '${locale.selectOptions}...',
               contentPadding: const EdgeInsets.symmetric(
-                vertical: 9.0,
+                vertical: 8.0,
                 horizontal: 4.0,
               ),
               suffixIcon: loading

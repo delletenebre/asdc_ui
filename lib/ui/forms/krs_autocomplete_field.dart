@@ -16,6 +16,7 @@ class KrsAutocompleteField extends FormBuilderFieldDecoration<String> {
     required super.name,
     super.onChanged,
     super.enabled,
+    Widget? suffixIcon,
     String? initialValue,
     String? labelText,
     String? hintText,
@@ -38,7 +39,7 @@ class KrsAutocompleteField extends FormBuilderFieldDecoration<String> {
               enabled: state.enabled,
               errorText: state.errorText,
               hintText: hintText,
-              suffixIcon: loadingState,
+              suffixIcon: loadingState ?? suffixIcon,
             );
 
             return KrsFieldLabel(

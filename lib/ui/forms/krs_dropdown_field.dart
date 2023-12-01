@@ -42,7 +42,7 @@ class KrsDropdownField<T> extends FormBuilderFieldDecoration<T> {
                       horizontal: 8.0,
                     )
                   : const EdgeInsets.symmetric(
-                      vertical: 10.5,
+                      vertical: 9.5,
                       horizontal: 12.0,
                     ),
               isDense: isDense,
