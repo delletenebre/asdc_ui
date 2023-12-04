@@ -8,6 +8,7 @@ export 'extensions/context_extensions.dart';
 // export 'extensions/string_extensions.dart';
 // export 'extensions/theme_data_extensions.dart';
 
+export 'models/country.dart';
 export 'models/laravel_error.dart';
 
 export 'models/paginators/paginator.dart';

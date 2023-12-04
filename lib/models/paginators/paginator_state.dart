@@ -15,7 +15,7 @@ class PaginatorState {
     this.filters = const {},
   });
 
-  PaginatorState fromJson(Map<String, dynamic> json) => PaginatorState(
+  factory PaginatorState.fromJson(Map<String, dynamic> json) => PaginatorState(
         cursor: json['cursor'] ?? '',
         page: int.tryParse(json['page']) ?? 1,
         perPage: int.tryParse(json['per_page']) ?? 10,

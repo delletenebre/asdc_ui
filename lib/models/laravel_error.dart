@@ -7,7 +7,7 @@ class LaravelError {
     this.errors = const {},
   });
 
-  LaravelError fromJson(Map<String, dynamic> json) => LaravelError(
+  factory LaravelError.fromJson(Map<String, dynamic> json) => LaravelError(
         message: json['message'] as String? ?? '',
         errors: json['errors'] as Map<String, String>? ?? {},
       );

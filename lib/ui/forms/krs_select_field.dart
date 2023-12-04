@@ -56,8 +56,12 @@ class KrsSelectField<T, K> extends FormBuilderFieldDecoration<T> {
                   : Row(
                       children: [
                         /// кнопка очистки выбранного варианта
-                        if (state.value != null)
+                        if (state.value != null && enabledState)
                           IconButton(
+                            focusNode: FocusNode(
+                              skipTraversal: true,
+                              canRequestFocus: false,
+                            ),
                             tooltip: locale.clear,
                             onPressed: () {
                               /// удаляем выбранный вариант
@@ -72,6 +76,7 @@ class KrsSelectField<T, K> extends FormBuilderFieldDecoration<T> {
                         /// стрелочка выпадающего меню
                         const IconButton(
                           onPressed: null,
+                          mouseCursor: MaterialStateMouseCursor.clickable,
                           icon: Icon(Icons.arrow_drop_down_outlined),
                         ),
                       ],
@@ -84,160 +89,152 @@ class KrsSelectField<T, K> extends FormBuilderFieldDecoration<T> {
               hasError: state.hasError,
               hasFocus: state.effectiveFocusNode.hasFocus,
               labelText: labelText,
-              child: InkWell(
-                onTap: enabledState ? () {} : null,
-                child: TextField(
-                    controller: state._controller,
-                    decoration: decoration,
-                    mouseCursor: MaterialStateMouseCursor.clickable,
-                    readOnly: true,
-                    style: decoration.textStyle,
-                    enableInteractiveSelection: false,
-                    enabled: enabled,
-                    onTap: !enabledState
-                        ? null
-                        : () async {
-                            await showDialog(
-                                context: state.context,
-                                builder: (context) {
-                                  Map<T, dynamic> options = state._options!;
+              child: TextField(
+                focusNode: state.effectiveFocusNode,
+                controller: state._controller,
+                decoration: decoration,
+                mouseCursor: MaterialStateMouseCursor.clickable,
+                readOnly: true,
+                style: decoration.textStyle,
+                // enableInteractiveSelection: false,
+                enabled: enabledState,
+                onTap: !enabledState
+                    ? null
+                    : () async {
+                        await showDialog(
+                            context: state.context,
+                            builder: (context) {
+                              Map<T, dynamic> options = state._options!;
 
-                                  return DialogView(
-                                    width: 400.0,
-                                    title: labelText != null
-                                        ? Text(labelText)
-                                        : const SizedBox(),
-                                    contentPadding: 0.0,
-                                    actions: const [],
-                                    content: StatefulBuilder(
-                                      builder: (context, setState) {
-                                        if (state._options!.isEmpty) {
-                                          return Padding(
-                                            padding: const EdgeInsets.all(24.0),
+                              return DialogView(
+                                width: 400.0,
+                                title: labelText != null
+                                    ? Text(labelText)
+                                    : const SizedBox(),
+                                contentPadding: 0.0,
+                                actions: const [],
+                                content: StatefulBuilder(
+                                  builder: (context, setState) {
+                                    if (state._options!.isEmpty) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(24.0),
+                                        child: EmptyStateView(
+                                          icon: const Icon(
+                                              Icons.data_array_outlined),
+                                          child: Text(
+                                            locale.noDataAvailable,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    }
+
+                                    return Column(
+                                      children: [
+                                        /// текстовое поле фильтра
+                                        if (filterEnabled)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 0.0,
+                                              bottom: 12.0,
+                                              left: 12.0,
+                                              right: 12.0,
+                                            ),
+                                            child: KrsSearchTextField(
+                                              onChanged: (value) {
+                                                if (value.isEmpty) {
+                                                  options = state._options!;
+                                                } else {
+                                                  final searchQuery =
+                                                      value.toLowerCase();
+
+                                                  options = filter?.call(
+                                                          searchQuery,
+                                                          state._options!) ??
+                                                      Map.fromEntries(state
+                                                          ._options!.entries
+                                                          .where((item) {
+                                                        return stringifiedSelectedOption(
+                                                                item.value)
+                                                            .toLowerCase()
+                                                            .contains(
+                                                                searchQuery);
+                                                      }));
+                                                }
+
+                                                setState(() {});
+                                              },
+                                            ),
+                                          ),
+
+                                        if (options.isEmpty)
+                                          const Padding(
+                                            padding: EdgeInsets.all(24.0),
                                             child: EmptyStateView(
-                                              icon: const Icon(
+                                              icon: Icon(
                                                   Icons.data_array_outlined),
                                               child: Text(
-                                                locale.noDataAvailable,
+                                                'Данные не найдены. Попробуйте изменить поисковой запрос',
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
-                                          );
-                                        }
-
-                                        return Column(
-                                          children: [
-                                            /// текстовое поле фильтра
-                                            if (filterEnabled)
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  top: 0.0,
-                                                  bottom: 12.0,
-                                                  left: 12.0,
-                                                  right: 12.0,
-                                                ),
-                                                child: KrsSearchTextField(
-                                                  onChanged: (value) {
-                                                    if (value.isEmpty) {
-                                                      options = state._options!;
-                                                    } else {
-                                                      final searchQuery =
-                                                          value.toLowerCase();
-
-                                                      options = filter?.call(
-                                                              searchQuery,
-                                                              state
-                                                                  ._options!) ??
-                                                          Map.fromEntries(state
-                                                              ._options!.entries
-                                                              .where((item) {
-                                                            return stringifiedSelectedOption(
-                                                                    item.value)
-                                                                .toLowerCase()
-                                                                .contains(
-                                                                    searchQuery);
-                                                          }));
-                                                    }
-
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                              ),
-
-                                            if (options.isEmpty)
-                                              const Padding(
-                                                padding: EdgeInsets.all(24.0),
-                                                child: EmptyStateView(
-                                                  icon: Icon(Icons
-                                                      .data_array_outlined),
-                                                  child: Text(
-                                                    'Данные не найдены. Попробуйте изменить поисковой запрос',
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              ),
-                                            if (options.isNotEmpty)
-                                              ConstrainedBox(
-                                                constraints:
-                                                    const BoxConstraints(
-                                                  maxHeight: 480.0,
-                                                ),
-                                                child: ListView.separated(
-                                                  primary: false,
-                                                  shrinkWrap: true,
-                                                  separatorBuilder:
-                                                      (context, index) {
-                                                    if (index ==
-                                                            pinnedIds.length -
-                                                                1 &&
-                                                        state._options!
-                                                                .length ==
-                                                            options.length) {
-                                                      return const Divider(
-                                                        height: 1.0,
-                                                        indent: 12.0,
-                                                        endIndent: 12.0,
-                                                      );
-                                                    }
-                                                    return const SizedBox();
-                                                  },
-                                                  itemCount: options.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    final id = options.keys
-                                                        .elementAt(index);
-                                                    final item = options.values
-                                                        .elementAt(index);
-                                                    final title = optionBuilder
-                                                            ?.call(item) ??
+                                          ),
+                                        if (options.isNotEmpty)
+                                          ConstrainedBox(
+                                            constraints: const BoxConstraints(
+                                              maxHeight: 480.0,
+                                            ),
+                                            child: ListView.separated(
+                                              primary: false,
+                                              shrinkWrap: true,
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                if (index ==
+                                                        pinnedIds.length - 1 &&
+                                                    state._options!.length ==
+                                                        options.length) {
+                                                  return const Divider(
+                                                    height: 1.0,
+                                                    indent: 12.0,
+                                                    endIndent: 12.0,
+                                                  );
+                                                }
+                                                return const SizedBox();
+                                              },
+                                              itemCount: options.length,
+                                              itemBuilder: (context, index) {
+                                                final id = options.keys
+                                                    .elementAt(index);
+                                                final item = options.values
+                                                    .elementAt(index);
+                                                final title =
+                                                    optionBuilder?.call(item) ??
                                                         Text('$item');
 
-                                                    return ListTile(
-                                                      dense: true,
-                                                      title: title,
-                                                      leading: id != state.value
-                                                          ? null
-                                                          : const Icon(
-                                                              Icons.check,
-                                                              size: 20.0),
-                                                      onTap: () {
-                                                        /// обновляем значение поля
-                                                        state.didChange(id);
-                                                        // onChanged?.call(id, options[id]);
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    );
+                                                return ListTile(
+                                                  dense: true,
+                                                  title: title,
+                                                  leading: id != state.value
+                                                      ? null
+                                                      : const Icon(Icons.check,
+                                                          size: 20.0),
+                                                  onTap: () {
+                                                    /// обновляем значение поля
+                                                    state.didChange(id);
+                                                    // onChanged?.call(id, options[id]);
+                                                    Navigator.of(context).pop();
                                                   },
-                                                ),
-                                              ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  );
-                                });
-                          }),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                            });
+                      },
               ),
             );
           },

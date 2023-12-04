@@ -36,15 +36,12 @@ class KrsInputDecoration extends InputDecoration {
                 vertical: isDense ? 10.5 : 14.0,
                 horizontal: isDense ? 8.0 : 12.0,
               ),
-
           errorMaxLines: 2,
           errorStyle: TextStyle(
             fontSize: 11.0,
             color: theme.colorScheme.error,
           ),
-
           floatingLabelBehavior: FloatingLabelBehavior.always,
-
           border: border ??
               OutlineInputBorder(
                 borderSide: BorderSide(
@@ -53,7 +50,6 @@ class KrsInputDecoration extends InputDecoration {
                 ),
                 borderRadius: _borderRadius,
               ),
-
           enabledBorder: border ??
               OutlineInputBorder(
                 borderSide: BorderSide(
@@ -64,7 +60,6 @@ class KrsInputDecoration extends InputDecoration {
                 ),
                 borderRadius: _borderRadius,
               ),
-
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: theme.colorScheme.primary,
@@ -72,7 +67,6 @@ class KrsInputDecoration extends InputDecoration {
             ),
             borderRadius: _borderRadius,
           ),
-
           errorBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: theme.colorScheme.error,
@@ -80,7 +74,6 @@ class KrsInputDecoration extends InputDecoration {
             ),
             borderRadius: _borderRadius,
           ),
-
           focusedErrorBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: theme.colorScheme.error,
@@ -88,7 +81,6 @@ class KrsInputDecoration extends InputDecoration {
             ),
             borderRadius: _borderRadius,
           ),
-
           disabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: theme.colorScheme.outline.withOpacity(0.16),
@@ -105,14 +97,12 @@ class KrsInputDecoration extends InputDecoration {
 
           filled: !enabled,
           fillColor: theme.colorScheme.outline.withOpacity(0.06),
-
           hintText: enabled ? hintText : null,
           hintMaxLines: hintMaxLines,
           hintStyle: TextStyle(
             color: theme.colorScheme.outline.withOpacity(0.62),
             fontSize: 12.0,
           ),
-
           suffixIconConstraints: const BoxConstraints(
             maxHeight: 28.0,
           ),
@@ -140,5 +130,9 @@ class KrsInputDecoration extends InputDecoration {
           // ) : null,
 
           prefixIcon: prefixIcon,
+          prefixIconConstraints: const BoxConstraints(
+            maxHeight: 24.0,
+            minWidth: 40.0,
+          ),
         );
 }
