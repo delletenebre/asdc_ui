@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-enum KrsSegmentedButtonType {
+enum AsdcSegmentedButtonType {
   start,
   middle,
   end,
 }
 
-class KrsSegmentedButton extends StatelessWidget {
-  final KrsSegmentedButtonType type;
+class AsdcSegmentedButton extends StatelessWidget {
+  final AsdcSegmentedButtonType type;
   final void Function()? onTap;
   final bool selected;
   final Widget child;
 
-  const KrsSegmentedButton({
+  const AsdcSegmentedButton({
     super.key,
-    this.type = KrsSegmentedButtonType.middle,
+    this.type = AsdcSegmentedButtonType.middle,
     this.onTap,
     this.selected = false,
     required this.child,
@@ -25,12 +25,12 @@ class KrsSegmentedButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     BorderRadius? borderRadius;
-    if (type == KrsSegmentedButtonType.start) {
+    if (type == AsdcSegmentedButtonType.start) {
       borderRadius = const BorderRadius.only(
         topLeft: Radius.circular(32.0),
         bottomLeft: Radius.circular(32.0),
       );
-    } else if (type == KrsSegmentedButtonType.end) {
+    } else if (type == AsdcSegmentedButtonType.end) {
       borderRadius = const BorderRadius.only(
         topRight: Radius.circular(32.0),
         bottomRight: Radius.circular(32.0),
@@ -41,7 +41,7 @@ class KrsSegmentedButton extends StatelessWidget {
       borderRadius: borderRadius,
       onTap: onTap,
       child: Ink(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           color:
@@ -53,7 +53,7 @@ class KrsSegmentedButton extends StatelessWidget {
                 ? theme.colorScheme.onPrimary
                 : theme.colorScheme.onSurfaceVariant,
           ),
-          child: child,
+          child: Center(child: child),
         ),
       ),
     );

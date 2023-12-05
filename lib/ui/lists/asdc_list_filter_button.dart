@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../extensions/date_time_extensions.dart';
 import '../../../extensions/map_extensions.dart';
+import '../../models/country.dart';
 import '../../resources/asdc_locale.dart';
 import '../forms/asdc_forms.dart';
 import 'asdc_list_filter.dart';
 
-class AsdcListFilterButton extends StatefulWidget {
+class AsdcListFilterButton<T> extends StatefulWidget {
   final List<AsdcListFilter> options;
   final Function()? onClose;
   final Function(AsdcListFilter value)? onApply;
@@ -19,10 +20,11 @@ class AsdcListFilterButton extends StatefulWidget {
   });
 
   @override
-  State<AsdcListFilterButton> createState() => _AsdcListFilterButtonState();
+  State<AsdcListFilterButton<T>> createState() =>
+      _AsdcListFilterButtonState<T>();
 }
 
-class _AsdcListFilterButtonState extends State<AsdcListFilterButton> {
+class _AsdcListFilterButtonState<T> extends State<AsdcListFilterButton<T>> {
   final formKey = GlobalKey<FormBuilderState>();
   late AsdcListFilter selectedOption = widget.options.first;
   dynamic seletedValue;
@@ -95,26 +97,60 @@ class _AsdcListFilterButtonState extends State<AsdcListFilterButton> {
                             seletedValue = value;
                           },
                         ),
-                      AsdcListFilterType.select => KrsDropdownField(
-                          name: 'filter_field_value',
-                          labelText: 'Значение',
-                          asyncOptions: selectedOption.asyncOptions!,
-                          onChanged: (key) async {
-                            final values = await selectedOption.asyncOptions!();
-                            seletedValue = values[key];
+                      AsdcListFilterType.select => Builder(
+                          builder: (context) {
+                            final asyncOptions = selectedOption.asyncOptions!
+                                as Future<Map<Object, dynamic>> Function();
+
+                            return KrsDropdownField(
+                              name: 'filter_field_value',
+                              labelText: 'Значение',
+                              asyncOptions: asyncOptions,
+                              onChanged: (key) async {
+                                final values = await asyncOptions();
+                                seletedValue = values[key];
+                              },
+                            );
                           },
                         ),
-                      AsdcListFilterType.multiselect =>
-                        KrsMultiselectField<String, String>(
-                          name: 'filter_field_value',
-                          labelText: 'Значение',
-                          optionToString: (option) => option,
-                          asyncOptions: selectedOption.asyncOptions!,
-                          onChanged: (value) async {
-                            final values = await selectedOption.asyncOptions!();
-                            seletedValue = value?.map((key) {
-                              return values[key];
-                            }).toList();
+                      AsdcListFilterType.multiselect => Builder(
+                          builder: (context) {
+                            final asyncOptions = selectedOption.asyncOptions!
+                                as Future<Map<String, String>> Function();
+
+                            return KrsMultiselectField<String, String>(
+                              name: 'filter_field_value',
+                              labelText: 'Значение',
+                              optionToString: (option) => option.toString(),
+                              asyncOptions: asyncOptions,
+                              onChanged: (value) async {
+                                final values = await asyncOptions();
+                                seletedValue = value?.map((key) {
+                                  return values[key];
+                                }).toList();
+                              },
+                            );
+                          },
+                        ),
+
+                      /// поле выбора страны
+                      AsdcListFilterType.country => Builder(
+                          builder: (context) {
+                            final asyncOptions = (selectedOption.asyncOptions
+                                as Future<List<Country>> Function())();
+
+                            return AsdcCountryField(
+                              name: 'filter_field_value',
+                              labelText: 'Значение',
+                              asyncCountries: asyncOptions,
+                              onChanged: (key) async {
+                                final values = await asyncOptions;
+                                seletedValue = values
+                                    .firstWhere((element) => element.id == key,
+                                        orElse: () => Country())
+                                    .officialRu;
+                              },
+                            );
                           },
                         ),
                       Object() => null,

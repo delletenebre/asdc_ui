@@ -3,15 +3,19 @@ enum AsdcListFilterType {
   date,
   select,
   multiselect,
+  country,
 }
 
-class AsdcListFilter {
+class AsdcListFilter<T> {
   final String name;
   final String label;
   final AsdcListFilterType type;
   final dynamic value;
   final dynamic formValue;
-  final Future<Map<String, String>> Function()? asyncOptions;
+
+  /// Map<String, T>
+  /// Future<dynamic> Function()
+  final Future<dynamic> Function()? asyncOptions;
 
   const AsdcListFilter({
     required this.name,
@@ -28,7 +32,9 @@ class AsdcListFilter {
     AsdcListFilterType? type,
     dynamic value,
     dynamic formValue,
-    Future<Map<String, String>> Function()? asyncOptions,
+
+    /// Map<String, T>
+    Future<dynamic> Function()? asyncOptions,
   }) =>
       AsdcListFilter(
         name: name ?? this.name,
