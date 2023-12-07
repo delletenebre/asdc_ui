@@ -6,6 +6,7 @@ import '../../extensions/theme_data_extensions.dart';
 import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
 import '../../resources/asdc_locale.dart';
+import '../containers/asdc_card.dart';
 import '../forms/asdc_forms.dart';
 import 'asdc_list_filter.dart';
 import 'asdc_list_filter_button.dart';
@@ -104,10 +105,7 @@ class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
       );
     }
 
-    return Material(
-      elevation: 1,
-      color: theme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(12.0),
+    return AsdcCard(
       child: Stack(
         children: [
           Column(

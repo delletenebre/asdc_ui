@@ -24,7 +24,6 @@ class AsdcTheme {
   }
 
   /// главный цвет в соответствии с Material You
-  // static const seedColor = Color(0xffa055a2);
   static const seedColor = Color(0xff007aff);
 
   /// светлая тема оформления

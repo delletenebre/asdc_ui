@@ -26,6 +26,8 @@ class KrsInputDecoration extends InputDecoration {
           fontSize: 14.0,
           color:
               enabled ? theme.colorScheme.onSurface : theme.colorScheme.outline,
+          wordSpacing: 1.0,
+          letterSpacing: 0.5,
         ),
         borderRadius = _borderRadius,
         super(

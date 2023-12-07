@@ -78,7 +78,6 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
                 behavior: const MaterialScrollBehavior(),
                 child: TextField(
                   scrollPadding: EdgeInsets.zero,
-
                   controller: state._effectiveController,
                   focusNode: state.effectiveFocusNode,
                   decoration: decoration,
