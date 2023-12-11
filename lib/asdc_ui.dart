@@ -21,6 +21,8 @@ export 'ui/pages/asdc_page_view.dart';
 export 'ui/lists/asdc_paginated_list.dart';
 export 'ui/lists/asdc_list_filter.dart';
 
+export 'ui/lists/asdc_responsive_table.dart';
+
 export 'ui/containers/asdc_card.dart';
 
 export 'ui/empty_state_view.dart';
