@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../extensions/date_time_extensions.dart';
 import '../../../extensions/map_extensions.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/country.dart';
-import '../../resources/asdc_locale.dart';
 import '../forms/asdc_forms.dart';
 import 'asdc_list_filter.dart';
 
@@ -32,7 +32,7 @@ class _AsdcListFilterButtonState<T> extends State<AsdcListFilterButton<T>> {
   @override
   Widget build(context) {
     final theme = Theme.of(context);
-    final locale = AsdcLocale.of(context);
+    final locale = lookupAppLocalizations(Locale('ru'));
 
     if (widget.options.isEmpty) {
       return const SizedBox();
