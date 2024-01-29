@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import '../../resources/asdc_locale.dart';
+import '../../l10n/app_localizations.dart';
 import '../dialogs/dialog_view.dart';
 import '../empty_state_view.dart';
 import 'krs_field_label.dart';
@@ -31,7 +31,7 @@ class KrsMultiselectField<T, K> extends FormBuilderFieldDecoration<List<T>> {
           builder: (FormFieldState<List<T>> field) {
             final state = field as _KrsDropdownFieldState<T, K>;
             final theme = Theme.of(state.context);
-            final locale = AsdcLocale.of(state.context);
+            final locale = lookupAppLocalizations(Locale('ru'));
 
             /// загружаются ли элементы списка
             final loading = state._options == null;

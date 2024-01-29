@@ -2,10 +2,9 @@ import 'package:asdc_ui/extensions/list_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
-import '../../extensions/theme_data_extensions.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
-import '../../resources/asdc_locale.dart';
 import '../containers/asdc_card.dart';
 import '../forms/asdc_forms.dart';
 import 'asdc_list_filter.dart';
@@ -89,7 +88,7 @@ class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
   @override
   Widget build(context) {
     final theme = Theme.of(context);
-    final locale = AsdcLocale.of(context);
+    final locale = lookupAppLocalizations(Locale('ru'));
 
     if (widget.error != null) {
       /// ^ если произошла ошибка

@@ -21,6 +21,14 @@ extension DateTimeFormatExtensions on DateTime? {
     }
   }
 
+  String formatDate([String format = 'dd MMMM y', String locale = 'ru']) {
+    if (this == null) {
+      return '';
+    } else {
+      return DateFormat(format, locale).format(this!);
+    }
+  }
+
   // String yearsFromNow() {
   //   if (this == null) {
   //     return '';
