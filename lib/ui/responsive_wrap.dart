@@ -37,6 +37,7 @@ class ResponsiveWrap extends StatelessWidget {
         return Wrap(
           alignment: WrapAlignment.start,
           spacing: spacing,
+          runSpacing: spacing,
           children: children.mapIndexed((index, child) {
             return SizedBox(
               width: isMobile ? null : gridWidth * (gridSizes?[index] ?? 1),

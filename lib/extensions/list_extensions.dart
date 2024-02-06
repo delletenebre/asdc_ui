@@ -22,4 +22,9 @@ extension ListExtensions<E> on List<E> {
     }
     return thisValue;
   }
+
+  List removeEmpty() {
+    removeWhere((element) => [null, ''].contains(element));
+    return this;
+  }
 }
