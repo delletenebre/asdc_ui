@@ -276,55 +276,69 @@ class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
             ),
           );
         },
-        child: FilledButton.tonal(
-          key: _key,
-          style: FilledButton.styleFrom(
-            padding: const EdgeInsets.fromLTRB(24.0, 10.0, 16.0, 10.0),
-          ),
-          onPressed: () {
-            // Check if the key is ready and the context exists
-            if (_key.currentContext != null) {
-              // Access the render object associated with the key's context
-              final renderBox =
-                  _key.currentContext!.findRenderObject() as RenderBox;
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FilledButton.tonal(
+              key: _key,
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.fromLTRB(24.0, 10.0, 16.0, 10.0),
+              ),
+              onPressed: () {
+                // Check if the key is ready and the context exists
+                if (_key.currentContext != null) {
+                  // Access the render object associated with the key's context
+                  final renderBox =
+                      _key.currentContext!.findRenderObject() as RenderBox;
 
-              // Get the position of the render object relative to the screen
-              final widgetPosition = renderBox.localToGlobal(Offset.zero);
-              final screenSize = MediaQuery.of(context).size;
+                  // Get the position of the render object relative to the screen
+                  final widgetPosition = renderBox.localToGlobal(Offset.zero);
+                  final screenSize = MediaQuery.of(context).size;
 
-              final notFitRight = screenSize.width -
-                      (widgetPosition.dx + renderBox.size.width) <
-                  width;
+                  final notFitRight = screenSize.width -
+                          (widgetPosition.dx + renderBox.size.width) <
+                      width;
 
-              final notFitBottom = screenSize.height -
-                      (widgetPosition.dy + renderBox.size.height) <
-                  (items.length * itemExtent) + (verticalPadding * 2);
+                  final notFitBottom = screenSize.height -
+                          (widgetPosition.dy + renderBox.size.height) <
+                      (items.length * itemExtent) + (verticalPadding * 2);
 
-              if (notFitRight && notFitBottom) {
-                /// ^ не вмещается по правому краю
-                targetAnchor = Alignment.topRight;
-                followerAnchor = Alignment.bottomRight;
-              } else if (notFitRight) {
-                /// ^ не вмещается по правому краю
-                targetAnchor = Alignment.bottomRight;
-                followerAnchor = Alignment.topRight;
-              } else if (notFitBottom) {
-                /// ^ не вмещается по правому краю
-                targetAnchor = Alignment.topLeft;
-                followerAnchor = Alignment.bottomLeft;
-              }
-            }
+                  if (notFitRight && notFitBottom) {
+                    /// ^ не вмещается по правому краю
+                    targetAnchor = Alignment.topRight;
+                    followerAnchor = Alignment.bottomRight;
+                  } else if (notFitRight) {
+                    /// ^ не вмещается по правому краю
+                    targetAnchor = Alignment.bottomRight;
+                    followerAnchor = Alignment.topRight;
+                  } else if (notFitBottom) {
+                    /// ^ не вмещается по правому краю
+                    targetAnchor = Alignment.topLeft;
+                    followerAnchor = Alignment.bottomLeft;
+                  }
+                }
 
-            overlayController.toggle();
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(buttonText),
-              const SizedBox(width: 8.0),
-              const Icon(Icons.arrow_drop_down_outlined, size: 18.0),
-            ],
-          ),
+                overlayController.toggle();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(buttonText),
+                  const SizedBox(width: 8.0),
+                  const Icon(Icons.arrow_drop_down_outlined, size: 18.0),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              '${startDate.formatDate('dd MMM y')} — ${endDate.formatDate('dd MMM y')}',
+              style: TextStyle(
+                fontSize: 10.0,
+                color: theme.colorScheme.outline,
+              ),
+            ),
+          ],
         ),
       ),
     );
