@@ -13,6 +13,7 @@ enum AsdcPeriods {
   lastMonth,
   currentMonth,
   currentYear,
+  lastYear,
   period,
 }
 
@@ -95,6 +96,11 @@ class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
         startDate = DateTime(now.year, 1, 1);
         endDate = DateTime(now.year, 12, 31);
         buttonText = locale.currentYear;
+        break;
+      case AsdcPeriods.lastYear:
+        startDate = DateTime(now.year - 1, 1, 1);
+        endDate = DateTime(now.year - 1, 12, 31);
+        buttonText = locale.lastYear;
         break;
       case AsdcPeriods.period:
         try {
@@ -207,6 +213,11 @@ class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
         onTap: () {},
         value: AsdcPeriods.currentYear,
         child: Text(locale.currentYear),
+      ),
+      PopupMenuItem(
+        onTap: () {},
+        value: AsdcPeriods.lastYear,
+        child: Text(locale.lastYear),
       ),
       PopupMenuItem(
         value: AsdcPeriods.period,

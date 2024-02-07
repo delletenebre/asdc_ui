@@ -217,6 +217,12 @@ abstract class AppLocalizations {
   /// **'Текущий год'**
   String get currentYear;
 
+  /// No description provided for @lastYear.
+  ///
+  /// In ru, this message translates to:
+  /// **'Прошлый год'**
+  String get lastYear;
+
   /// No description provided for @specifyPeriod.
   ///
   /// In ru, this message translates to:

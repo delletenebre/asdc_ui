@@ -70,6 +70,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get currentYear => 'Текущий год';
 
   @override
+  String get lastYear => 'Прошлый год';
+
+  @override
   String get specifyPeriod => 'Указать период';
 
   @override
