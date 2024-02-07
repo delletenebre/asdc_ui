@@ -3,6 +3,7 @@ import 'package:asdc_ui/extensions/string_extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../asdc_overlay_portal.dart';
 import '../../dialogs/dialog_view.dart';
 import '../../responsive_wrap.dart';
 import '../asdc_forms.dart';
@@ -38,15 +39,6 @@ class AsdcPeriodFilterField<T> extends StatefulWidget {
 
 class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
   T? selectedItem;
-
-  final overlayController = OverlayPortalController();
-
-  final _layerLink = LayerLink();
-
-  final _key = GlobalKey();
-
-  Alignment targetAnchor = Alignment.bottomLeft;
-  Alignment followerAnchor = Alignment.topLeft;
 
   String buttonText = '';
   AsdcPeriods currentPeriod = AsdcPeriods.month;
@@ -175,14 +167,6 @@ class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
     setState(() {});
   }
 
-  /// закрываем меню
-  void closeMenu() {
-    overlayController.hide();
-
-    targetAnchor = Alignment.bottomLeft;
-    followerAnchor = Alignment.topLeft;
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -225,121 +209,68 @@ class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
       ),
     ];
 
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: OverlayPortal(
-        controller: overlayController,
-        overlayChildBuilder: (context) {
-          return SizedBox.fromSize(
-            size: MediaQuery.of(context).size,
-            child: Stack(
+    final key = GlobalKey<AsdcOverlayPortalState>();
+
+    return AsdcOverlayPortal(
+      key: key,
+      size: Size(width, (items.length * itemExtent) + (verticalPadding * 2)),
+      overlay: Card(
+        elevation: 12.0,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: width,
+            minWidth: width,
+          ),
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(
+              vertical: verticalPadding,
+            ),
+            shrinkWrap: true,
+            itemExtent: itemExtent,
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return ListTile(
+                onTap: () {
+                  changeValue(item.value!);
+                  key.currentState?.hideOverlay();
+                },
+                title: item.child,
+              );
+            },
+          ),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FilledButton.tonal(
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.fromLTRB(24.0, 10.0, 16.0, 10.0),
+            ),
+            onPressed: () {
+              key.currentState?.showOverlay();
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ModalBarrier(
-                  onDismiss: () {
-                    closeMenu();
-                  },
-                ),
-                CompositedTransformFollower(
-                  link: _layerLink,
-                  targetAnchor: targetAnchor,
-                  followerAnchor: followerAnchor,
-                  child: Card(
-                    elevation: 12.0,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: width,
-                        minWidth: width,
-                      ),
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.symmetric(
-                          vertical: verticalPadding,
-                        ),
-                        shrinkWrap: true,
-                        itemExtent: itemExtent,
-                        itemCount: items.length,
-                        itemBuilder: (context, index) {
-                          final item = items[index];
-                          return ListTile(
-                            onTap: () {
-                              changeValue(item.value!);
-                              closeMenu();
-                            },
-                            title: item.child,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+                Text(buttonText),
+                const SizedBox(width: 8.0),
+                const Icon(Icons.arrow_drop_down_outlined, size: 18.0),
               ],
             ),
-          );
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FilledButton.tonal(
-              key: _key,
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.fromLTRB(24.0, 10.0, 16.0, 10.0),
-              ),
-              onPressed: () {
-                // Check if the key is ready and the context exists
-                if (_key.currentContext != null) {
-                  // Access the render object associated with the key's context
-                  final renderBox =
-                      _key.currentContext!.findRenderObject() as RenderBox;
-
-                  // Get the position of the render object relative to the screen
-                  final widgetPosition = renderBox.localToGlobal(Offset.zero);
-                  final screenSize = MediaQuery.of(context).size;
-
-                  final notFitRight = screenSize.width -
-                          (widgetPosition.dx + renderBox.size.width) <
-                      width;
-
-                  final notFitBottom = screenSize.height -
-                          (widgetPosition.dy + renderBox.size.height) <
-                      (items.length * itemExtent) + (verticalPadding * 2);
-
-                  if (notFitRight && notFitBottom) {
-                    /// ^ не вмещается по правому краю
-                    targetAnchor = Alignment.topRight;
-                    followerAnchor = Alignment.bottomRight;
-                  } else if (notFitRight) {
-                    /// ^ не вмещается по правому краю
-                    targetAnchor = Alignment.bottomRight;
-                    followerAnchor = Alignment.topRight;
-                  } else if (notFitBottom) {
-                    /// ^ не вмещается по правому краю
-                    targetAnchor = Alignment.topLeft;
-                    followerAnchor = Alignment.bottomLeft;
-                  }
-                }
-
-                overlayController.toggle();
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(buttonText),
-                  const SizedBox(width: 8.0),
-                  const Icon(Icons.arrow_drop_down_outlined, size: 18.0),
-                ],
-              ),
+          ),
+          const SizedBox(height: 4.0),
+          Text(
+            '${startDate.formatDate('dd MMM y')} — ${endDate.formatDate('dd MMM y')}',
+            style: TextStyle(
+              fontSize: 10.0,
+              color: theme.colorScheme.outline,
             ),
-            const SizedBox(height: 4.0),
-            Text(
-              '${startDate.formatDate('dd MMM y')} — ${endDate.formatDate('dd MMM y')}',
-              style: TextStyle(
-                fontSize: 10.0,
-                color: theme.colorScheme.outline,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
