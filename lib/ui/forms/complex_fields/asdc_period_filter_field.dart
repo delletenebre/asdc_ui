@@ -214,6 +214,7 @@ class _AsdcPeriodFilterFieldState<T> extends State<AsdcPeriodFilterField<T>> {
     return AsdcOverlayPortal(
       key: key,
       size: Size(width, (items.length * itemExtent) + (verticalPadding * 2)),
+      offset: const Offset(0.0, -16.0),
       overlay: Card(
         elevation: 12.0,
         child: ConstrainedBox(
