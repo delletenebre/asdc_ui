@@ -84,9 +84,7 @@ class AsdcOverlayPortalState<T> extends State<AsdcOverlayPortal<T>> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+  Widget build(context) {
     return CompositedTransformTarget(
       link: _layerLink,
       child: OverlayPortal(

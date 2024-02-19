@@ -88,7 +88,7 @@ class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
   @override
   Widget build(context) {
     final theme = Theme.of(context);
-    final locale = lookupAppLocalizations(Locale('ru'));
+    final locale = lookupAppLocalizations(const Locale('ru'));
 
     if (widget.error != null) {
       /// ^ если произошла ошибка

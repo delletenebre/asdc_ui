@@ -1,4 +1,3 @@
-import 'package:asdc_ui/resources/asdc_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../extensions/theme_data_extensions.dart';
@@ -26,14 +25,14 @@ class AsdcResponsiveTable extends StatelessWidget {
     final theme = Theme.of(context);
 
     /// находим количество колонок, на которое делим сетку
-    final widthSm = sizes.sm.fold(0.0, (sum, item) => sum + item.width);
+    // final widthSm = sizes.sm.fold(0.0, (sum, item) => sum + item.width);
     final widthMd = sizes.md.fold(0.0, (sum, item) => sum + item.width) +
         (spacing * (headBuilders.length - 1)) +
         indents * 2;
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isSm = constraints.maxWidth < Breakpoints.sm;
+        // final isSm = constraints.maxWidth < Breakpoints.sm;
 
         // /// ширина одной ячейки сетки
         // final width =

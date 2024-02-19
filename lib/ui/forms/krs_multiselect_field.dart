@@ -31,7 +31,7 @@ class KrsMultiselectField<T, K> extends FormBuilderFieldDecoration<List<T>> {
           builder: (FormFieldState<List<T>> field) {
             final state = field as _KrsDropdownFieldState<T, K>;
             final theme = Theme.of(state.context);
-            final locale = lookupAppLocalizations(Locale('ru'));
+            final locale = lookupAppLocalizations(const Locale('ru'));
 
             /// загружаются ли элементы списка
             final loading = state._options == null;

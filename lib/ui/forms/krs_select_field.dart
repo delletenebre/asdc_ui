@@ -35,7 +35,7 @@ class KrsSelectField<T, K> extends FormBuilderFieldDecoration<T> {
           builder: (FormFieldState<T> field) {
             final state = field as _KrsDropdownFieldState<T, K>;
             final theme = Theme.of(state.context);
-            final locale = lookupAppLocalizations(Locale('ru'));
+            final locale = lookupAppLocalizations(const Locale('ru'));
 
             final stringifiedSelectedOption =
                 selectedOptionToString ?? ((option) => option.toString());

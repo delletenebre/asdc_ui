@@ -32,7 +32,7 @@ class _AsdcListFilterButtonState<T> extends State<AsdcListFilterButton<T>> {
   @override
   Widget build(context) {
     final theme = Theme.of(context);
-    final locale = lookupAppLocalizations(Locale('ru'));
+    final locale = lookupAppLocalizations(const Locale('ru'));
 
     if (widget.options.isEmpty) {
       return const SizedBox();
@@ -153,7 +153,7 @@ class _AsdcListFilterButtonState<T> extends State<AsdcListFilterButton<T>> {
                             );
                           },
                         ),
-                      Object() => null,
+                      // Object() => null,
                     },
                   ),
                 ],
