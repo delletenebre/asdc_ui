@@ -20,7 +20,7 @@ class ResponsiveWrap extends StatelessWidget {
   Widget build(context) {
     final columns = children.length;
 
-    /// назодим количество колонок, на которое делим сетку
+    /// находим количество колонок, на которое делим сетку
     int gridSize = gridSizes?.reduce((a, b) => a + b) ?? columns;
 
     return LayoutBuilder(
@@ -32,15 +32,18 @@ class ResponsiveWrap extends StatelessWidget {
 
         /// ширина одной ячейки сетки
         final gridWidth =
-            (constraints.maxWidth - spacing * (columns - 1)) / gridSize;
+            (constraints.maxWidth - spacing * (gridSize - 1)) / gridSize;
 
         return Wrap(
           alignment: WrapAlignment.start,
           spacing: spacing,
           runSpacing: spacing,
           children: children.mapIndexed((index, child) {
+            final currentGridSize = gridSizes?[index] ?? 1;
+            final extraSpacing = ((currentGridSize - 1) * spacing);
             return SizedBox(
-              width: isMobile ? null : gridWidth * (gridSizes?[index] ?? 1),
+              width:
+                  isMobile ? null : gridWidth * currentGridSize + extraSpacing,
               child: child,
             );
           }).toList(),
