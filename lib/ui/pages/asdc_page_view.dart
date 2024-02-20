@@ -19,6 +19,7 @@ class AsdcPageView extends StatelessWidget {
   @override
   Widget build(context) {
     final theme = Theme.of(context);
+    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       // drawer: isMobile ? const NavigationDrawer() : null,
@@ -40,15 +41,34 @@ class AsdcPageView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  /// заголовок страницы
-                  if (title != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: DefaultTextStyle(
-                        style: theme.textTheme.titleLarge!,
-                        child: title!,
-                      ),
-                    ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (screenSize.width <= Breakpoints.md)
+                        Transform.translate(
+                          offset: const Offset(0.0, -6.0),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 12.0),
+                            child: IconButton(
+                              onPressed: () {
+                                Scaffold.of(context).openDrawer();
+                              },
+                              icon: const Icon(Icons.menu),
+                            ),
+                          ),
+                        ),
+
+                      /// заголовок страницы
+                      if (title != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: DefaultTextStyle(
+                            style: theme.textTheme.titleLarge!,
+                            child: title!,
+                          ),
+                        ),
+                    ],
+                  ),
 
                   /// основной контент
                   child,
