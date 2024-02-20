@@ -15,6 +15,8 @@ export 'models/paginators/paginator.dart';
 export 'models/paginators/paginator_state.dart';
 export 'models/paginators/cursor_paginator.dart';
 
+export 'ui/dialogs/dialog_view.dart';
+
 export 'resources/asdc_theme.dart';
 export 'resources/asdc_storage.dart';
 export 'ui/pages/asdc_page_view.dart';
