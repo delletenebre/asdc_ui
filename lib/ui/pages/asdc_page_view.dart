@@ -43,6 +43,7 @@ class AsdcPageView extends StatelessWidget {
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       if (screenSize.width <= Breakpoints.md)
                         Transform.translate(
@@ -60,11 +61,13 @@ class AsdcPageView extends StatelessWidget {
 
                       /// заголовок страницы
                       if (title != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
-                          child: DefaultTextStyle(
-                            style: theme.textTheme.titleLarge!,
-                            child: title!,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 24.0),
+                            child: DefaultTextStyle(
+                              style: theme.textTheme.titleLarge!,
+                              child: title!,
+                            ),
                           ),
                         ),
                     ],
