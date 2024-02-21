@@ -1,17 +1,13 @@
 import 'package:asdc_ui/asdc_ui.dart';
-import 'package:asdc_ui/extensions/list_extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../models/laravel_error.dart';
-import '../../models/paginators/paginator.dart';
 import '../asdc_context_menu_builder.dart';
-import '../containers/asdc_card.dart';
-import '../forms/asdc_forms.dart';
-import 'asdc_list_filter.dart';
 import 'asdc_list_filter_button.dart';
+import 'package:universal_html/html.dart' as html;
 
 class AsdcPaginatedList<T> extends StatefulWidget {
   final bool loading;
@@ -493,6 +489,13 @@ class _DataViewState<T> extends State<_DataView<T>> {
         hoveredRow = -1;
       },
     );
+    if (widget.contextButtonsBuilder != null && kIsWeb) {
+      html.document.onContextMenu.listen((event) {
+        if (event.path.firstOrNull.toString() == 'flutter-view') {
+          return event.preventDefault();
+        }
+      });
+    }
     super.initState();
   }
 
