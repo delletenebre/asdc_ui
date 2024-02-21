@@ -14,7 +14,7 @@ class CursorPaginator<T> {
   factory CursorPaginator.fromJson(
           Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
       CursorPaginator(
-        perPage: int.tryParse(json['per_page']) ?? 10,
+        perPage: int.tryParse(json['per_page'].toString()) ?? 10,
         nextCursor: json['next_cursor'] ?? '',
         prevCursor: json['prev_cursor'] ?? '',
         data: (json['data'] as List<dynamic>?)?.map(fromJsonT).toList() ??
