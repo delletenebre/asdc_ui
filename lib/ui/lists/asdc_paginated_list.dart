@@ -1,11 +1,13 @@
 import 'package:asdc_ui/asdc_ui.dart';
 import 'package:asdc_ui/extensions/list_extensions.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
+import '../asdc_context_menu_builder.dart';
 import '../containers/asdc_card.dart';
 import '../forms/asdc_forms.dart';
 import 'asdc_list_filter.dart';
@@ -27,6 +29,9 @@ class AsdcPaginatedList<T> extends StatefulWidget {
 
   final List<Widget> actions;
 
+  /// Builds the context menu.
+  final ContextButtonsBuilder<T>? contextButtonsBuilder;
+
   const AsdcPaginatedList({
     super.key,
     this.loading = false,
@@ -38,6 +43,7 @@ class AsdcPaginatedList<T> extends StatefulWidget {
     required this.columns,
     this.filterOptions = const [],
     this.actions = const [],
+    this.contextButtonsBuilder,
   }) : assert(cellBuilders.length == columns.length);
 
   @override
@@ -195,6 +201,7 @@ class _AsdcPaginatedListState<T> extends State<AsdcPaginatedList<T>> {
                   onFormChanged();
                 },
                 onTap: widget.onTap,
+                contextButtonsBuilder: widget.contextButtonsBuilder,
               ),
 
               /// навигация по данным (номер страницы, количество результатов)
@@ -432,6 +439,9 @@ class PaginatedListColumn {
   });
 }
 
+typedef ContextButtonsBuilder<T> = List<ContextMenuButtonItem> Function(
+    int index, T item);
+
 class _DataView<T> extends StatefulWidget {
   final List<T> data;
   final List<PaginatedListColumn> columns;
@@ -442,6 +452,9 @@ class _DataView<T> extends StatefulWidget {
 
   final void Function(T item)? onTap;
 
+  /// Builds the context menu.
+  final ContextButtonsBuilder<T>? contextButtonsBuilder;
+
   const _DataView({
     super.key,
     required this.data,
@@ -449,6 +462,7 @@ class _DataView<T> extends StatefulWidget {
     required this.rowBuilders,
     required this.onSortChanged,
     this.onTap,
+    this.contextButtonsBuilder,
   }) : assert(rowBuilders.length == columns.length);
 
   @override
@@ -458,13 +472,29 @@ class _DataView<T> extends StatefulWidget {
 class _DataViewState<T> extends State<_DataView<T>> {
   int _hoveredRow = -1;
   int get hoveredRow => _hoveredRow;
-  set hoveredRow(int value) => {setState(() => _hoveredRow = value)};
+  set hoveredRow(int value) {
+    if (!_contextMenuController.isShown) {
+      setState(() => _hoveredRow = value);
+    }
+  }
 
   /// поле по которому включена сортировка
   String sortBy = '';
 
   /// направление сортировки (по возрастанию/по убыванию)
   String sortDirection = '';
+
+  late final AsdcContextMenuController _contextMenuController;
+
+  @override
+  void initState() {
+    _contextMenuController = AsdcContextMenuController(
+      onRemove: () {
+        hoveredRow = -1;
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(context) {
@@ -553,17 +583,13 @@ class _DataViewState<T> extends State<_DataView<T>> {
             }
 
             /// возвращаем ячейки таблицы
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => widget.onTap?.call(widget.data[vicinity.row - 1]),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Align(
-                  alignment: widget.columns[vicinity.column].align ??
-                      Alignment.centerLeft,
-                  child: widget.rowBuilders[vicinity.column](
-                      context, widget.data[vicinity.row - 1]),
-                ),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Align(
+                alignment: widget.columns[vicinity.column].align ??
+                    Alignment.centerLeft,
+                child: widget.rowBuilders[vicinity.column](
+                    context, widget.data[vicinity.row - 1]),
               ),
             );
           },
@@ -622,6 +648,40 @@ class _DataViewState<T> extends State<_DataView<T>> {
               },
               onExit: (event) {
                 hoveredRow = -1;
+              },
+              recognizerFactories: <Type, GestureRecognizerFactory>{
+                TapGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+                  () => TapGestureRecognizer(),
+                  (TapGestureRecognizer t) {
+                    t.onTap = () => widget.onTap?.call(widget.data[index - 1]);
+                    t.onSecondaryTap = () {
+                      final position = t.initialPosition?.global ?? Offset.zero;
+                      if (widget.contextButtonsBuilder != null) {
+                        hoveredRow = index;
+                        _contextMenuController.show(
+                          context: context,
+                          contextMenuBuilder: (context) {
+                            return AdaptiveTextSelectionToolbar.buttonItems(
+                              anchors: TextSelectionToolbarAnchors(
+                                primaryAnchor: position,
+                              ),
+                              buttonItems: widget.contextButtonsBuilder!
+                                  .call(index, widget.data[index - 1]),
+                            );
+                          },
+                        );
+                      }
+                    };
+                  },
+                ),
+                // LongPressGestureRecognizer:
+                //     GestureRecognizerFactoryWithHandlers<
+                //         LongPressGestureRecognizer>(
+                //   () => LongPressGestureRecognizer(),
+                //   (LongPressGestureRecognizer t) =>
+                //       t.onLongPress = () => print('LOOOOGN PREEES'),
+                // ),
               },
             );
           },
