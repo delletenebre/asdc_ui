@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/laravel_error.dart';
 import '../../models/paginators/paginator.dart';
 
-class CursorPaginatedList<T> extends StatelessWidget {
+class AsdcCursorPaginatedList<T> extends StatelessWidget {
   final bool loading;
   final Object? error;
   final CursorPaginator? paginator;
@@ -13,7 +13,7 @@ class CursorPaginatedList<T> extends StatelessWidget {
 
   final void Function(PaginatorState paginatorState) onPaginationChanged;
 
-  const CursorPaginatedList({
+  const AsdcCursorPaginatedList({
     super.key,
     this.loading = false,
     this.error,
