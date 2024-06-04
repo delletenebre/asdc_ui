@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../extensions/theme_data_extensions.dart';
-
 class AsdcResponsiveTable extends StatelessWidget {
   final AsdcResponsiveSizes sizes;
   final int itemCount;
@@ -180,7 +178,9 @@ class _ListRowState extends State<_ListRow> {
         });
       },
       child: ColoredBox(
-        color: hovered ? theme.surfaceContainerHighest : Colors.transparent,
+        color: hovered
+            ? theme.colorScheme.surfaceContainerHighest
+            : Colors.transparent,
         child: child,
       ),
     );

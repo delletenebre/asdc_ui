@@ -80,8 +80,7 @@ class DialogView extends StatelessWidget {
                                   child: DefaultTextStyle(
                                     style:
                                         theme.textTheme.titleMedium!.copyWith(
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.62),
+                                      color: theme.colorScheme.outline,
                                     ),
                                     child: subtitle!,
                                   ),

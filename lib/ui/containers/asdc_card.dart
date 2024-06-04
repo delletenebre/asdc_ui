@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../extensions/theme_data_extensions.dart';
-
 class AsdcCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
@@ -27,7 +25,7 @@ class AsdcCard extends StatelessWidget {
 
     return Material(
       elevation: 1,
-      color: theme.surfaceContainerLow,
+      color: theme.colorScheme.surfaceContainerLow,
       borderRadius: BorderRadius.circular(12.0),
       child: childWidget,
     );
