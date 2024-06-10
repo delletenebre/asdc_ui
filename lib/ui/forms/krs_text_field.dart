@@ -44,6 +44,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
     List<TextInputFormatter>? inputFormatters,
     int? maxLength,
     bool isDense = false,
+    bool hidden = false,
   }) : super(
           valueTransformer: (T == double)
               ? doubleValueTransformer
@@ -66,6 +67,10 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
               suffixIcon: loading ? const KrsFieldLoadingButton() : suffixIcon,
               // prefixIcon: prefixIcon,
             );
+
+            if (hidden) {
+              return const SizedBox();
+            }
 
             return KrsFieldLabel(
               padding: padding,

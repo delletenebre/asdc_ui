@@ -1,13 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'krs_field_label.dart';
 import 'krs_field_loading_button.dart';
 import 'krs_input_decoration.dart';
 
-class KrsAutocompleteField extends FormBuilderFieldDecoration<String> {
+class KrsAutocompleteField<T> extends FormBuilderFieldDecoration<String> {
   final Future<Iterable<String>> Function() asyncItems;
   final void Function(bool, String?)? onFocusChanged;
 
@@ -23,6 +24,7 @@ class KrsAutocompleteField extends FormBuilderFieldDecoration<String> {
     bool loading = false,
     required this.asyncItems,
     ValueChanged<String>? onSubmitted,
+    List<TextInputFormatter>? inputFormatters,
     this.onFocusChanged,
   }) : super(
           initialValue: initialValue,
@@ -117,6 +119,14 @@ class KrsAutocompleteField extends FormBuilderFieldDecoration<String> {
                     },
                     onSubmitted: onSubmitted,
                     enabled: state.enabled,
+                    inputFormatters: inputFormatters ??
+                        [
+                          if (T == int) FilteringTextInputFormatter.digitsOnly,
+                          if (T == double)
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,4}'),
+                            ),
+                        ],
                   ),
                 ),
               ),
@@ -129,7 +139,7 @@ class KrsAutocompleteField extends FormBuilderFieldDecoration<String> {
       _KrsAutocompleteFieldState();
 }
 
-class _KrsAutocompleteFieldState
+class _KrsAutocompleteFieldState<T>
     extends FormBuilderFieldDecorationState<KrsAutocompleteField, String> {
   TextEditingController? get _effectiveController => _controller;
 
