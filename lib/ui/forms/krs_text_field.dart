@@ -32,6 +32,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
     this.textCapitalization = TextCapitalization.none,
     String? labelText,
     String? hintText,
+    Widget? suffix,
     Widget? suffixIcon,
     bool loading = false,
     bool obscureText = false,
@@ -81,47 +82,57 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
               controller: state._effectiveController,
               child: ScrollConfiguration(
                 behavior: const MaterialScrollBehavior(),
-                child: TextField(
-                  scrollPadding: EdgeInsets.zero,
-                  controller: state._effectiveController,
-                  focusNode: state.effectiveFocusNode,
-                  decoration: decoration,
-                  keyboardType: keyboardType,
-                  // textInputAction: textInputAction,
-                  contextMenuBuilder: contextMenuBuilder,
-                  style: decoration.textStyle,
-                  obscureText: obscureText,
-                  textInputAction: textInputAction,
-                  onSubmitted: onSubmitted,
-                  textCapitalization: textCapitalization,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        scrollPadding: EdgeInsets.zero,
+                        controller: state._effectiveController,
+                        focusNode: state.effectiveFocusNode,
+                        decoration: decoration,
+                        keyboardType: keyboardType,
+                        // textInputAction: textInputAction,
+                        contextMenuBuilder: contextMenuBuilder,
+                        style: decoration.textStyle,
+                        obscureText: obscureText,
+                        textInputAction: textInputAction,
+                        onSubmitted: onSubmitted,
+                        textCapitalization: textCapitalization,
 
-                  // autofocus: autofocus,
-                  readOnly: readOnly,
+                        // autofocus: autofocus,
+                        readOnly: readOnly,
 
-                  // autocorrect: autocorrect,
-                  // enableSuggestions: enableSuggestions,
-                  maxLength: maxLength,
-                  buildCounter: (context,
-                      {required currentLength, required isFocused, maxLength}) {
-                    return null;
-                  },
-                  // onTap: onTap,
-                  onTapOutside: (event) {
-                    /// убираем фокус с поля
-                    state.effectiveFocusNode.unfocus();
-                  },
-                  // onEditingComplete: onEditingComplete,
-                  // onSubmitted: onSubmitted,
-                  inputFormatters: inputFormatters ??
-                      [
-                        if (T == int) FilteringTextInputFormatter.digitsOnly,
-                        if (T == double)
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d+\.?\d{0,4}'),
-                          ),
-                      ],
-                  enabled: state.enabled,
-                  // keyboardAppearance: keyboardAppearance,
+                        // autocorrect: autocorrect,
+                        // enableSuggestions: enableSuggestions,
+                        maxLength: maxLength,
+                        buildCounter: (context,
+                            {required currentLength,
+                            required isFocused,
+                            maxLength}) {
+                          return null;
+                        },
+                        // onTap: onTap,
+                        onTapOutside: (event) {
+                          /// убираем фокус с поля
+                          state.effectiveFocusNode.unfocus();
+                        },
+                        // onEditingComplete: onEditingComplete,
+                        // onSubmitted: onSubmitted,
+                        inputFormatters: inputFormatters ??
+                            [
+                              if (T == int)
+                                FilteringTextInputFormatter.digitsOnly,
+                              if (T == double)
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,4}'),
+                                ),
+                            ],
+                        enabled: state.enabled,
+                        // keyboardAppearance: keyboardAppearance,
+                      ),
+                    ),
+                    if (suffix != null) suffix
+                  ],
                 ),
               ),
             );
