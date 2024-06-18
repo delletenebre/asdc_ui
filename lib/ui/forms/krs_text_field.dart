@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../asdc_context_menu_builder.dart';
 import 'krs_field_label.dart';
 import 'krs_field_loading_button.dart';
 import 'krs_input_decoration.dart';
@@ -38,7 +39,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
     bool obscureText = false,
     TextInputAction? textInputAction,
     void Function(String)? onSubmitted,
-    this.contextMenuBuilder, // = _defaultContextMenuBuilder,
+    this.contextMenuBuilder = _defaultContextMenuBuilder,
     TextInputType? keyboardType,
     bool readOnly = false,
     EdgeInsetsGeometry padding = const EdgeInsets.only(bottom: 24.0),
@@ -73,6 +74,15 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
               return const SizedBox();
             }
 
+            final contextMenuController = AsdcContextMenuController();
+            // if (widget.contextButtonsBuilder != null && kIsWeb) {
+            //   html.document.onContextMenu.listen((event) {
+            //     if (event.path.firstOrNull.toString() == 'flutter-view') {
+            //       return event.preventDefault();
+            //     }
+            //   });
+            // }
+
             return KrsFieldLabel(
               padding: padding,
               hasError: state.hasError,
@@ -85,50 +95,82 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        scrollPadding: EdgeInsets.zero,
-                        controller: state._effectiveController,
-                        focusNode: state.effectiveFocusNode,
-                        decoration: decoration,
-                        keyboardType: keyboardType,
-                        // textInputAction: textInputAction,
-                        contextMenuBuilder: contextMenuBuilder,
-                        style: decoration.textStyle,
-                        obscureText: obscureText,
-                        textInputAction: textInputAction,
-                        onSubmitted: onSubmitted,
-                        textCapitalization: textCapitalization,
+                      child: GestureDetector(
+                        onSecondaryTapUp: state.enabled
+                            ? null
+                            : (t) {
+                                final position = t.globalPosition;
 
-                        // autofocus: autofocus,
-                        readOnly: readOnly,
+                                contextMenuController.show(
+                                  context: state.context,
+                                  contextMenuBuilder: (context) {
+                                    return AdaptiveTextSelectionToolbar
+                                        .buttonItems(
+                                      anchors: TextSelectionToolbarAnchors(
+                                        primaryAnchor: position,
+                                      ),
+                                      buttonItems: [
+                                        ContextMenuButtonItem(
+                                          onPressed: () {
+                                            AsdcContextMenuController
+                                                .removeAny();
+                                            Clipboard.setData(ClipboardData(
+                                                text: state.value ?? ''));
+                                          },
+                                          label:
+                                              MaterialLocalizations.of(context)
+                                                  .copyButtonLabel,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                        child: TextField(
+                          scrollPadding: EdgeInsets.zero,
+                          controller: state._effectiveController,
+                          focusNode: state.effectiveFocusNode,
+                          decoration: decoration,
+                          keyboardType: keyboardType,
+                          // textInputAction: textInputAction,
+                          contextMenuBuilder: contextMenuBuilder,
+                          style: decoration.textStyle,
+                          obscureText: obscureText,
+                          textInputAction: textInputAction,
+                          onSubmitted: onSubmitted,
+                          textCapitalization: textCapitalization,
 
-                        // autocorrect: autocorrect,
-                        // enableSuggestions: enableSuggestions,
-                        maxLength: maxLength,
-                        buildCounter: (context,
-                            {required currentLength,
-                            required isFocused,
-                            maxLength}) {
-                          return null;
-                        },
-                        // onTap: onTap,
-                        onTapOutside: (event) {
-                          /// убираем фокус с поля
-                          state.effectiveFocusNode.unfocus();
-                        },
-                        // onEditingComplete: onEditingComplete,
-                        // onSubmitted: onSubmitted,
-                        inputFormatters: inputFormatters ??
-                            [
-                              if (T == int)
-                                FilteringTextInputFormatter.digitsOnly,
-                              if (T == double)
-                                FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d{0,4}'),
-                                ),
-                            ],
-                        enabled: state.enabled,
-                        // keyboardAppearance: keyboardAppearance,
+                          // autofocus: autofocus,
+                          readOnly: readOnly,
+
+                          // autocorrect: autocorrect,
+                          // enableSuggestions: enableSuggestions,
+                          maxLength: maxLength,
+                          buildCounter: (context,
+                              {required currentLength,
+                              required isFocused,
+                              maxLength}) {
+                            return null;
+                          },
+                          // onTap: onTap,
+                          onTapOutside: (event) {
+                            /// убираем фокус с поля
+                            state.effectiveFocusNode.unfocus();
+                          },
+                          // onEditingComplete: onEditingComplete,
+                          // onSubmitted: onSubmitted,
+                          inputFormatters: inputFormatters ??
+                              [
+                                if (T == int)
+                                  FilteringTextInputFormatter.digitsOnly,
+                                if (T == double)
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d{0,4}'),
+                                  ),
+                              ],
+                          enabled: state.enabled,
+                          // keyboardAppearance: keyboardAppearance,
+                        ),
                       ),
                     ),
                     if (suffix != null) suffix
@@ -142,11 +184,10 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
   static Widget _defaultContextMenuBuilder(
     BuildContext context,
     EditableTextState editableTextState,
-  ) {
-    return AdaptiveTextSelectionToolbar.editableText(
-      editableTextState: editableTextState,
-    );
-  }
+  ) =>
+      AdaptiveTextSelectionToolbar.editableText(
+        editableTextState: editableTextState,
+      );
 
   @override
   FormBuilderFieldDecorationState<KrsTextField, String> createState() =>
