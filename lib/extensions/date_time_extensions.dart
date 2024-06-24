@@ -29,21 +29,21 @@ extension DateTimeFormatExtensions on DateTime? {
     }
   }
 
-  // String yearsFromNow() {
-  //   if (this == null) {
-  //     return '';
-  //   } else {
-  //     final now = DateTime.now();
-  //     final year = now.year - this!.year;
-  //     final month = now.month - this!.month;
-  //     if (month < 0) {
-  //       /// negative month means it's still upcoming
-  //       return '${year - 1}';
-  //     } else {
-  //       return '$year';
-  //     }
-  //   }
-  // }
+  String yearsFromNow() {
+    if (this == null) {
+      return '';
+    } else {
+      final now = DateTime.now();
+      final year = now.year - this!.year;
+      final month = now.month - this!.month;
+      if (month < 0) {
+        /// negative month means it's still upcoming
+        return '${year - 1}';
+      } else {
+        return '$year';
+      }
+    }
+  }
 
   DateTime? get startOfDay {
     if (this == null) {
