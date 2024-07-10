@@ -47,6 +47,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
     int? maxLength,
     bool isDense = false,
     bool hidden = false,
+    List<String> autofillHints = const <String>[],
   }) : super(
           valueTransformer: (T == double)
               ? doubleValueTransformer
@@ -139,6 +140,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
                           textInputAction: textInputAction,
                           onSubmitted: onSubmitted,
                           textCapitalization: textCapitalization,
+                          autofillHints: autofillHints,
 
                           // autofocus: autofocus,
                           readOnly: readOnly,
