@@ -38,7 +38,7 @@ class AsdcNotification extends StatelessWidget {
         break;
       case AsdcNotificationType.info:
       default:
-        backgroundColor = theme.colorScheme.surfaceVariant;
+        backgroundColor = theme.colorScheme.surfaceContainerHighest;
         foregroundColor = theme.colorScheme.onSurfaceVariant;
     }
 

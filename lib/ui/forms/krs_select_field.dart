@@ -76,7 +76,7 @@ class KrsSelectField<T, K> extends FormBuilderFieldDecoration<T> {
                         /// стрелочка выпадающего меню
                         const IconButton(
                           onPressed: null,
-                          mouseCursor: MaterialStateMouseCursor.clickable,
+                          mouseCursor: WidgetStateMouseCursor.clickable,
                           icon: Icon(Icons.arrow_drop_down_outlined),
                         ),
                       ],
@@ -93,7 +93,7 @@ class KrsSelectField<T, K> extends FormBuilderFieldDecoration<T> {
                 focusNode: state.effectiveFocusNode,
                 controller: state._controller,
                 decoration: decoration,
-                mouseCursor: MaterialStateMouseCursor.clickable,
+                mouseCursor: WidgetStateMouseCursor.clickable,
                 readOnly: true,
                 style: decoration.textStyle,
                 // enableInteractiveSelection: false,

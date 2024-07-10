@@ -46,10 +46,10 @@ class KrsSegmentedField extends FormBuilderFieldDecoration<String?> {
                 decoration: decoration,
                 child: SegmentedButton<String?>(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
                       (states) {
-                        if (states.contains(MaterialState.selected)) {
-                          if (states.contains(MaterialState.disabled)) {
+                        if (states.contains(WidgetState.selected)) {
+                          if (states.contains(WidgetState.disabled)) {
                             return theme.colorScheme.primary.withOpacity(0.12);
                           } else {
                             return theme.colorScheme.primary.withOpacity(0.28);
@@ -59,9 +59,9 @@ class KrsSegmentedField extends FormBuilderFieldDecoration<String?> {
                         return null;
                       },
                     ),
-                    textStyle: MaterialStateProperty.all(decoration.textStyle),
-                    side: MaterialStateProperty.all(BorderSide.none),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    textStyle: WidgetStateProperty.all(decoration.textStyle),
+                    side: WidgetStateProperty.all(BorderSide.none),
+                    shape: WidgetStateProperty.all(RoundedRectangleBorder(
                       borderRadius: decoration.borderRadius,
                     )),
                   ),

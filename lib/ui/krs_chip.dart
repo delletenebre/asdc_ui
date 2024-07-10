@@ -36,7 +36,7 @@ class KrsChip extends StatelessWidget {
         break;
       case KrsChipType.none:
       default:
-        backgroundColor = theme.colorScheme.surfaceVariant;
+        backgroundColor = theme.colorScheme.surfaceContainerHighest;
         foregroundColor = theme.colorScheme.onSurfaceVariant;
     }
 
