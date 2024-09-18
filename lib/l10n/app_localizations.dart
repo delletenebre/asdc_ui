@@ -7,6 +7,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ru.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
 ///
@@ -270,6 +272,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Не указано'**
   String get notSpecified;
+
+  /// No description provided for @update.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновить'**
+  String get update;
 
   /// No description provided for @selectAll.
   ///

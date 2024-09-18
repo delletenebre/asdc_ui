@@ -1,5 +1,7 @@
 import 'app_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Russian (`ru`).
 class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
@@ -95,6 +97,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get notSpecified => 'Не указано';
+
+  @override
+  String get update => 'Обновить';
 
   @override
   String get selectAll => 'Выделить все';
