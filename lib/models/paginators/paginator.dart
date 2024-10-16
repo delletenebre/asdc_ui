@@ -44,6 +44,25 @@ class Paginator<T> {
         'data': data.map(toJsonT).toList(),
       };
 
+  Paginator<T> copyWith({
+    int? total,
+    int? perPage,
+    int? currentPage,
+    int? lastPage,
+    int? from,
+    int? to,
+    List<T>? data,
+  }) =>
+      Paginator<T>(
+        total: total ?? this.total,
+        perPage: perPage ?? this.perPage,
+        currentPage: currentPage ?? this.currentPage,
+        lastPage: lastPage ?? this.lastPage,
+        from: from ?? this.from,
+        to: to ?? this.to,
+        data: data ?? this.data,
+      );
+
   bool get isEmpty => data.isEmpty;
   bool get isNotEmpty => !isEmpty;
   int get count => data.length;
