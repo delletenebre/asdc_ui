@@ -60,7 +60,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
 
             final decoration = KrsInputDecoration(
               theme: theme,
-              enabled: state.enabled,
+              enabled: state.enabled && !loading,
 
               isDense: isDense,
 

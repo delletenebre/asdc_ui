@@ -38,7 +38,7 @@ class KrsAutocompleteField<T> extends FormBuilderFieldDecoration<String> {
 
             final decoration = KrsInputDecoration(
               theme: theme,
-              enabled: state.enabled,
+              enabled: state.enabled && !loading,
               errorText: state.errorText,
               hintText: hintText,
               suffixIcon: loadingState ?? suffixIcon,
