@@ -10,6 +10,7 @@ class AsdcAddressField extends StatefulWidget {
   final String registrationLabel;
   final String matchLabel;
   final String actualLabel;
+  final bool enabled;
 
   const AsdcAddressField({
     super.key,
@@ -18,6 +19,7 @@ class AsdcAddressField extends StatefulWidget {
     required this.registrationLabel,
     required this.matchLabel,
     required this.actualLabel,
+    this.enabled = true,
   });
 
   @override
@@ -35,6 +37,7 @@ class _AsdcAddressFieldState extends State<AsdcAddressField> {
       /// поле адреса регистрации / юридического адреса
       KrsTextField(
         name: registrationName,
+        enabled: widget.enabled,
         labelText: widget.registrationLabel,
         onChanged: (value) {
           if (widget.controller.fieldValue(matchName) == true) {
@@ -45,6 +48,7 @@ class _AsdcAddressFieldState extends State<AsdcAddressField> {
 
       KrsCheckboxField(
         name: matchName,
+        enabled: widget.enabled,
         titleText: widget.matchLabel,
         onChanged: (value) {
           if (value == true) {
@@ -70,7 +74,8 @@ class _AsdcAddressFieldState extends State<AsdcAddressField> {
       /// поле фактического / почтового адреса
       KrsTextField(
         name: actualName,
-        enabled: widget.controller.fieldValue(matchName) == false,
+        enabled:
+            widget.enabled && widget.controller.fieldValue(matchName) == false,
         labelText: widget.actualLabel,
       ),
     ]);
