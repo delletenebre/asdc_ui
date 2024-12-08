@@ -29,6 +29,7 @@ class KrsTextField<T> extends FormBuilderFieldDecoration<String> {
     super.onChanged,
     super.enabled,
     super.initialValue,
+    super.validator,
     dynamic Function(String?)? valueTransformer,
     this.textCapitalization = TextCapitalization.none,
     String? labelText,
