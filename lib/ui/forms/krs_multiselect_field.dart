@@ -21,6 +21,7 @@ class KrsMultiselectField<T, K> extends FormBuilderFieldDecoration<List<T>> {
     super.enabled,
     super.initialValue,
     super.valueTransformer,
+    super.validator,
     required this.asyncOptions,
     this.optionBuilder,
     required this.optionToString,
